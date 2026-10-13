@@ -1198,50 +1198,57 @@ body.galeria-aberta {
   }
 }
 
-/* 2. Navbar compacta em linha com os 4 links (Telas até 750px) */
+/* 2. Navbar compacta em linha ajustada (Logo maior/deslocada e textos maiores/centrados) */
 @media (max-width: 750px) {
   .menu {
-    justify-content: flex-end !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important; /* Separa a logo e os links com espaço equilibrado */
     flex-wrap: nowrap !important;
-    height: 65px !important;
-    padding: 0 0.8rem !important;
+    height: 72px !important;
+    padding: 0 1.2rem !important;
     border-radius: 999px !important;
   }
 
+  /* Logo trazida mais para a direita e ligeiramente maior */
   .logo {
-    position: absolute !important;
-    left: 0.8rem !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    height: 50px !important;
+    position: static !important;
+    transform: none !important;
+    height: 52px !important;
     width: auto !important;
+    margin-left: 0.4rem !important; /* Afasta da borda esquerda da pílula */
   }
 
-  /* Esconde o botão de hambúrguer para manter os 4 links sempre visíveis */
+  /* Esconde o botão de hambúrguer para manter os 4 links visíveis */
   .botao-menu {
     display: none !important;
   }
 
-  /* Força a exibição horizontal dos 4 links */
+  /* Links organizados na horizontal e centrados */
   .menu nav {
     position: static !important;
     transform: none !important;
     display: flex !important;
+    align-items: center !important;
     width: auto !important;
     padding-bottom: 0 !important;
-    gap: 0.15rem !important;
+    gap: 0.2rem !important;
   }
 
   .menu.aberto nav {
     display: flex !important;
   }
 
-  /* Tamanho otimizado para caberem: Home, Sobre, Criar e Projetos */
+  /* Textos maiores, encorpados e centrados verticalmente */
   .menu nav a {
-    display: inline-block !important;
-    padding: 0.35rem 0.45rem !important;
-    font-size: 0.68rem !important;
-    letter-spacing: 0.02em !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0.45rem 0.65rem !important;
+    font-size: 0.78rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.03em !important;
     white-space: nowrap !important;
   }
 }
@@ -1297,7 +1304,6 @@ body.galeria-aberta {
     background: rgba(18, 20, 28, 0.88);
   }
 }
-
 
 /* ---------- FUNDO DA PÁGINA PROJETOS (sólido, com degradé) ---------- */
 
