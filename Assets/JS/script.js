@@ -428,3 +428,17 @@ if (etiqueta) {
   etiqueta.addEventListener('pointerup', soltar);
   etiqueta.addEventListener('pointercancel', soltar);
 }
+
+/* ---------- GARANTE O CLIQUE NOS 4 LINKS DO MENU MOBILE ---------- */
+document.addEventListener("DOMContentLoaded", function () {
+  const linksMenu = document.querySelectorAll(".menu nav a");
+  const menuContainer = document.querySelector(".menu");
+
+  linksMenu.forEach(link => {
+    link.addEventListener("click", function () {
+      if (menuContainer) {
+        menuContainer.classList.remove("aberto");
+      }
+    });
+  });
+});

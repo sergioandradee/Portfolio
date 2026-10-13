@@ -1166,7 +1166,11 @@ body.galeria-aberta {
   }
 }
 
-/* ---------- RESPONSIVIDADE ---------- */
+/* ==========================================================================
+   RESPONSIVIDADE UNIFICADA (MOBILE & TABLET)
+   ========================================================================== */
+
+/* 1. Ajustes para a secção Sobre e Rodapé (Telas até 800px) */
 @media (max-width: 800px) {
   #sobre {
     padding: 7rem 1.5rem 4rem;
@@ -1174,7 +1178,7 @@ body.galeria-aberta {
 
   .sobre-layout {
     grid-template-columns: 1fr;
-    transform: none !important; /* Reseta o deslocamento horizontal no telemóvel */
+    transform: none !important; /* Reseta o deslocamento horizontal no telemóvel para ficar centrado */
     gap: 2.5rem;
   }
 
@@ -1194,93 +1198,86 @@ body.galeria-aberta {
   }
 }
 
+/* 2. Navbar compacta em linha com os 4 links (Telas até 750px) */
 @media (max-width: 750px) {
   .menu {
-    justify-content: flex-end;
-    flex-wrap: nowrap;
-    height: 70px;
-    padding: 0 1rem;
-    border-radius: 999px;
+    justify-content: flex-end !important;
+    flex-wrap: nowrap !important;
+    height: 65px !important;
+    padding: 0 0.8rem !important;
+    border-radius: 999px !important;
   }
 
   .logo {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 60px;
-    width: auto;
+    position: absolute !important;
+    left: 0.8rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    height: 50px !important;
+    width: auto !important;
   }
 
-  /* Esconde o botão de hambúrguer para manter os links sempre visíveis */
+  /* Esconde o botão de hambúrguer para manter os 4 links sempre visíveis */
   .botao-menu {
     display: none !important;
   }
 
-  /* Força os links da navbar a ficarem na horizontal */
+  /* Força a exibição horizontal dos 4 links */
   .menu nav {
-    position: static;
-    transform: none;
+    position: static !important;
+    transform: none !important;
     display: flex !important;
-    width: auto;
-    padding-bottom: 0;
-    gap: 0.1rem;
+    width: auto !important;
+    padding-bottom: 0 !important;
+    gap: 0.15rem !important;
   }
 
   .menu.aberto nav {
-    display: flex;
+    display: flex !important;
   }
 
-  /* Diminui o texto para caberem todas as palavras na barra */
+  /* Tamanho otimizado para caberem: Home, Sobre, Criar e Projetos */
   .menu nav a {
-    display: inline-block;
-    padding: 0.4rem 0.55rem;
-    font-size: 0.72rem;
-    letter-spacing: 0.03em;
+    display: inline-block !important;
+    padding: 0.35rem 0.45rem !important;
+    font-size: 0.68rem !important;
+    letter-spacing: 0.02em !important;
+    white-space: nowrap !important;
   }
 }
 
-@media (min-width: 751px) and (max-width: 800px) {
-  .menu {
-    justify-content: space-between;
-    flex-wrap: wrap;
-    height: auto;
-    min-height: 88px;
-    padding: 0.5rem 1.2rem;
-    border-radius: 36px;
+/* 3. Projetos organizados de 2 em 2 colunas (Telas até 700px) */
+@media (max-width: 700px) {
+  .lista-projetos {
+    grid-template-columns: repeat(2, 1fr) !important; /* Força 2 colunas lado a lado */
+    gap: 1rem !important;
   }
-  .logo {
-    position: absolute;
-    left: 2rem;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 140px;
-    width: auto;
+
+  .projeto {
+    padding: 0.7rem !important;
+    border-radius: 20px !important;
   }
-  .botao-menu {
-    display: block;
+
+  .projeto h3 {
+    font-size: 0.95rem !important;
+    padding: 0 !important;
   }
-  .menu nav {
-    display: none;
-    width: 100%;
-    padding-bottom: 1rem;
-  }
-  .menu.aberto nav {
-    display: block;
-  }
-  .menu nav a {
-    display: block;
-    padding: 0.8rem 1.4rem;
-    font-size: 0.95rem;
+
+  .pagina-projetos #projetos {
+    padding-top: 8rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }
 
+/* 4. Ajustes finos de logo para Desktop/Tablet */
 @media (min-width: 751px) {
   .menu .logo {
     height: 100px;
   }
 }
 
+/* 5. Ajustes para a Galeria de imagens (Telas até 600px) */
 @media (max-width: 600px) {
   .galeria-overlay-conteudo {
     padding-inline: 0.65rem;
