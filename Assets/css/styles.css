@@ -1168,8 +1168,14 @@ body.galeria-aberta {
 
 /* ---------- RESPONSIVIDADE ---------- */
 @media (max-width: 800px) {
+  #sobre {
+    padding: 7rem 1.5rem 4rem;
+  }
+
   .sobre-layout {
     grid-template-columns: 1fr;
+    transform: none !important; /* Reseta o deslocamento horizontal no telemóvel */
+    gap: 2.5rem;
   }
 
   .sobre-caixa {
@@ -1188,7 +1194,53 @@ body.galeria-aberta {
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 750px) {
+  .menu {
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    height: 70px;
+    padding: 0 1rem;
+    border-radius: 999px;
+  }
+
+  .logo {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 60px;
+    width: auto;
+  }
+
+  /* Esconde o botão de hambúrguer para manter os links sempre visíveis */
+  .botao-menu {
+    display: none !important;
+  }
+
+  /* Força os links da navbar a ficarem na horizontal */
+  .menu nav {
+    position: static;
+    transform: none;
+    display: flex !important;
+    width: auto;
+    padding-bottom: 0;
+    gap: 0.1rem;
+  }
+
+  .menu.aberto nav {
+    display: flex;
+  }
+
+  /* Diminui o texto para caberem todas as palavras na barra */
+  .menu nav a {
+    display: inline-block;
+    padding: 0.4rem 0.55rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
+  }
+}
+
+@media (min-width: 751px) and (max-width: 800px) {
   .menu {
     justify-content: space-between;
     flex-wrap: wrap;
@@ -1197,7 +1249,6 @@ body.galeria-aberta {
     padding: 0.5rem 1.2rem;
     border-radius: 36px;
   }
-
   .logo {
     position: absolute;
     left: 2rem;
@@ -1206,30 +1257,25 @@ body.galeria-aberta {
     height: 140px;
     width: auto;
   }
-
   .botao-menu {
     display: block;
   }
-
   .menu nav {
-    position: static;
-    transform: none;
     display: none;
     width: 100%;
     padding-bottom: 1rem;
   }
-
   .menu.aberto nav {
     display: block;
   }
-
   .menu nav a {
     display: block;
     padding: 0.8rem 1.4rem;
+    font-size: 0.95rem;
   }
 }
 
-@media (min-width: 701px) {
+@media (min-width: 751px) {
   .menu .logo {
     height: 100px;
   }
@@ -1254,6 +1300,7 @@ body.galeria-aberta {
     background: rgba(18, 20, 28, 0.88);
   }
 }
+
 
 /* ---------- FUNDO DA PÁGINA PROJETOS (sólido, com degradé) ---------- */
 
@@ -1404,4 +1451,28 @@ body.saindo {
 .etiqueta:active,
 .etiqueta:active * {
   cursor: grabbing !important;
+}
+/* ---------- PROJETOS EM DUAS COLUNAS NO TELEMÓVEL ---------- */
+@media (max-width: 700px) {
+  .lista-projetos {
+    grid-template-columns: repeat(2, 1fr) !important; /* Força exatamente 2 colunas lado a lado */
+    gap: 1rem !important; /* Reduz o espaço entre os cartões para encaixarem perfeitamente */
+  }
+
+  /* Ajustes estéticos opcionais para os cartões ficarem harmoniosos em 2 colunas */
+  .projeto {
+    padding: 0.7rem !important;
+    border-radius: 20px !important;
+  }
+
+  .projeto h3 {
+    font-size: 0.95rem !important; /* Títulos ligeiramente menores para caberem bem */
+    padding: 0 !important;
+  }
+
+  .pagina-projetos #projetos {
+    padding-top: 8rem; /* Reduz o topo no telemóvel para dar mais espaço */
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
