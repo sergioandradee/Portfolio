@@ -1123,14 +1123,20 @@ body.saindo {
 }
 
 /* ---------- Menu no telemóvel: continua FLUTUANTE, só mais compacto ---------- */
+/* ---------- Menu no telemóvel: Animação e dinamismo no Scroll ---------- */
 @media (max-width: 750px) {
   .menu {
-    /* position: fixed, top e centralização vêm da regra base */
     width: min(94%, 780px);
     height: 72px;
     padding: 0 0.9rem;
     justify-content: space-between;
     flex-wrap: nowrap;
+    /* Transições suaves para a animação de recolher e expandir */
+    transition: width 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                padding 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+                background 0.3s ease, 
+                box-shadow 0.3s ease;
   }
 
   .logo {
@@ -1139,11 +1145,13 @@ body.saindo {
     height: 52px;
     margin-left: 0.2rem;
     flex-shrink: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
   .menu nav {
     width: auto;
     gap: 0.1rem;
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
   .menu nav a {
@@ -1155,6 +1163,51 @@ body.saindo {
     font-weight: 700;
     letter-spacing: 0.03em;
     white-space: nowrap;
+  }
+
+  /* Botão Hambúrguer */
+  .botao-menu {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  /* ESTADO RECOLHIDO: Vira a bolinha com o ícone hambúrguer */
+  .menu.recolhido {
+    width: 58px !important;
+    height: 58px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    cursor: pointer;
+    background: rgba(20, 38, 107, 0.85);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .menu.recolhido .logo,
+  .menu.recolhido nav {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+    position: absolute;
+  }
+
+  .menu.recolhido .botao-menu {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
   }
 }
 
@@ -1170,6 +1223,7 @@ body.saindo {
     letter-spacing: 0.02em;
   }
 }
+
 
 /* ---------- Projetos em 2 colunas no telemóvel ---------- */
 @media (max-width: 700px) {

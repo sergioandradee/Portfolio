@@ -442,3 +442,47 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
+/* ---------- NAVBAR INTERATIVA NO MOBILE (Bolinha no Scroll) ---------- */
+document.addEventListener("DOMContentLoaded", function () {
+  const menu = document.querySelector(".menu");
+  const botaoMenu = document.getElementById("botao-menu");
+
+  if (!menu) return;
+
+  // Controla o Scroll para fechar/abrir a navbar no mobile
+  window.addEventListener("scroll", function () {
+    if (window.innerWidth <= 750) {
+      if (window.scrollY > 80) {
+        // Se scrolear para baixo, transforma na bolinha (se não estiver aberta manualmente)
+        if (!menu.classList.contains("aberto-manual")) {
+          menu.classList.add("recolhido");
+        }
+      } else {
+        // Se voltar ao topo, expande a navbar completa novamente
+        menu.classList.remove("recolhido");
+        menu.classList.remove("aberto-manual");
+      }
+    }
+  });
+
+  // Ao tocar na bolinha recolhida, expande para a navbar completa
+  menu.addEventListener("click", function (e) {
+    if (window.innerWidth <= 750 && menu.classList.contains("recolhido")) {
+      menu.classList.remove("recolhido");
+      menu.classList.add("aberto-manual");
+    }
+  });
+
+  // Fecha o menu se tocar num dos links
+  const links = document.querySelectorAll(".menu nav a");
+  links.forEach(link => {
+    link.addEventListener("click", function () {
+      if (window.innerWidth <= 750) {
+        menu.classList.remove("aberto-manual");
+        if (window.scrollY > 80) {
+          menu.classList.add("recolhido");
+        }
+      }
+    });
+  });
+});
