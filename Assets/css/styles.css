@@ -381,6 +381,7 @@ section {
 }
 
 /* ---------- SOBRE (Deslocado para a Esquerda) ---------- */
+/* ---------- SOBRE (Desktop) ---------- */
 #sobre {
   max-width: 1250px;
   min-height: 100vh;
@@ -398,7 +399,7 @@ section {
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
   align-items: center;
-  /* Valor negativo puxa tanto o personagem quanto a caixa para a esquerda */
+  /* Deslocado para a esquerda apenas no computador */
   transform: translateX(-55px); 
 }
 
@@ -416,6 +417,26 @@ section {
   justify-content: center;
   width: 100%;
 }
+
+/* ---------- RESPONSIVIDADE (Telemóveis e Telas Pequenas) ---------- */
+@media (max-width: 800px) {
+  #sobre {
+    padding: 7rem 1.5rem 4rem;
+  }
+
+  .sobre-layout {
+    grid-template-columns: 1fr;
+    /* Reseta o deslocamento horizontal no telemóvel para ficar perfeitamente centrado */
+    transform: none !important; 
+    gap: 2.5rem;
+  }
+
+  .sobre-caixa {
+    min-height: 0;
+    padding: 2rem;
+  }
+}
+
 
 
 
