@@ -1124,45 +1124,58 @@ body.saindo {
 
 /* ---------- Menu no telemóvel: continua FLUTUANTE, só mais compacto ---------- */
 /* ---------- Menu no telemóvel: Animação e dinamismo no Scroll ---------- */
+/* ---------- Menu no telemóvel: Animação, tamanhos e espaçamentos ajustados ---------- */
 @media (max-width: 750px) {
   .menu {
     width: min(94%, 780px);
     height: 72px;
-    padding: 0 0.9rem;
-    justify-content: space-between;
-    flex-wrap: nowrap;
+    padding: 0 0.8rem 0 1rem !important; /* Reduz o padding interno para dar mais espaço útil */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
     /* Transições suaves para a animação de recolher e expandir */
     transition: width 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), 
                 height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), 
                 padding 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+                left 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+                transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
                 background 0.3s ease, 
                 box-shadow 0.3s ease;
   }
 
+  /* Logo maior e mais aproximada para a direita */
   .logo {
-    position: static;
-    transform: none;
-    height: 52px;
-    margin-left: 0.2rem;
-    flex-shrink: 0;
+    position: static !important;
+    transform: none !important;
+    height: 56px !important; /* Aumenta a logo */
+    width: auto !important;
+    margin-left: 0.4rem !important; /* Desloca a logo um pouco mais para a direita */
+    margin-right: 0.5rem !important; /* Empurra os links para mais perto */
+    flex-shrink: 0 !important;
     transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
+  /* Bloco de links ocupando o resto do espaço e empurrado para a esquerda */
   .menu nav {
-    width: auto;
-    gap: 0.1rem;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-around !important; /* Distribui os 4 links uniformemente */
+    gap: 0.1rem !important;
     transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
+  /* Textos maiores e com melhor espaçamento nos botões */
   .menu nav a {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.45rem 0.55rem;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    white-space: nowrap;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0.45rem 0.6rem !important;
+    font-size: 0.78rem !important; /* Letras maiores e mais legíveis */
+    font-weight: 700 !important;
+    letter-spacing: 0.02em !important;
+    white-space: nowrap !important;
   }
 
   /* Botão Hambúrguer */
@@ -1184,7 +1197,7 @@ body.saindo {
     transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
-  /* ESTADO RECOLHIDO: Vira a bolinha com o ícone hambúrguer */
+  /* ESTADO RECOLHIDO: Vira a bolinha no CANTO ESQUERDO */
   .menu.recolhido {
     width: 58px !important;
     height: 58px !important;
@@ -1194,6 +1207,10 @@ body.saindo {
     cursor: pointer;
     background: rgba(20, 38, 107, 0.85);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+
+    /* Encosta a bolinha no canto esquerdo com margem */
+    left: 20px !important;
+    transform: none !important;
   }
 
   .menu.recolhido .logo,
@@ -1210,6 +1227,7 @@ body.saindo {
     transform: scale(1);
   }
 }
+
 
 /* Telas muito estreitas (iPhone SE, etc.) */
 @media (max-width: 380px) {
