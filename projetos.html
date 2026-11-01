@@ -12,10 +12,9 @@
 <body class="sem-circulos pagina-projetos">
 
   <div class="cursor" id="cursor">
-  <div class="cursor-bola"><span class="cursor-texto">Ver</span></div>
-</div>
+    <div class="cursor-bola"><span class="cursor-texto">Ver</span></div>
+  </div>
 
-  <!-- MENU -->
   <!-- MENU -->
   <header class="menu vidro">
     <a href="index.html"><img class="logo" src="Assets/imgs/minha.logo.png" alt="Sergio Andrade"></a>
@@ -31,79 +30,74 @@
   </header>
 
 
-  <!-- PROJETOS -->
-  <!-- Adicionei um padding-top no style para não ficar escondido debaixo do menu -->
+  <!-- PARTE PROJETOS: cada projeto é uma pasta em cima da mesa -->
   <section id="projetos">
     <div class="titulo-secao entrada-baixo">
       <h2>Projetos</h2>
     </div>
 
-    <div class="lista-projetos">
-      
-      <!-- Card do projeto  X -->
-      <a class="projeto entrada-baixo" >
-        <div class="capa">
-          <img src="Assets/imgs/Em_Breve.jpg" alt="X">
-        </div>
-        <p class="rotulo">Branding</p>
-        <h3>EM BREVE</h3>
+    <!-- Os botões de filtro são criados sozinhos pelo JavaScript,
+         a partir do texto de cada .pasta-aba (Branding, Afiches...). -->
+    <div class="filtros" id="filtros" role="group" aria-label="Filtrar projetos por categoria"></div>
+
+    <div class="lista-projetos" id="listaProjetos">
+
+      <!-- PASTA DE PROJETO. Para adicionar um projeto, copia um bloco inteiro e muda:
+           1) href  2) texto da aba (categoria)  3) imagem de capa (src e alt)  4) título (h3)
+           Para um projeto que ainda não está pronto, usa a classe "em-breve" e tira o href. -->
+
+      <!-- Em breve -->
+      <a class="projeto em-breve entrada-baixo">
+        <span class="pasta-aba">Branding</span>
+        <div class="capa"><img src="Assets/imgs/Em_Breve.jpg" alt="Projeto em breve"></div>
+        <div class="pasta-frente"><h3>Em breve</h3><span class="pasta-abrir">Aguarda</span></div>
       </a>
 
-      <!-- Card do projeto Dama Centeio -->
+      <!-- Dama Centeio -->
       <a class="projeto entrada-baixo" href="projeto2.dama.html">
-        <div class="capa">
-          <img src="Assets/imgs/dama1.jpg" alt="dama — imagem 1">
-        </div>
-        <p class="rotulo">Branding</p>
-        <h3>Dama Centeio</h3>
+        <span class="pasta-aba">Branding</span>
+        <div class="capa"><img src="Assets/imgs/dama1.jpg" alt="Dama Centeio — imagem de capa"></div>
+        <div class="pasta-frente"><h3>Dama Centeio</h3><span class="pasta-abrir">Abrir ↗</span></div>
       </a>
 
-      <!-- Card do projeto Sojou -->
+      <!-- Sojou -->
       <a class="projeto entrada-baixo" href="projeto3.sojou.html">
-        <div class="capa">
-          <img src="Assets/imgs/sojou1.jpg" alt="sojou — imagem 1">
-        </div>
-        <p class="rotulo">Branding</p>
-        <h3>Sojou</h3>
+        <span class="pasta-aba">Branding</span>
+        <div class="capa"><img src="Assets/imgs/sojou1.jpg" alt="Sojou — imagem de capa"></div>
+        <div class="pasta-frente"><h3>Sojou</h3><span class="pasta-abrir">Abrir ↗</span></div>
       </a>
-      
-      <!-- Card do projeto Bloom Coffee -->
+
+      <!-- Bloom Coffee -->
       <a class="projeto entrada-baixo" href="projeto4.bloom.html">
-        <div class="capa">
-          <img src="Assets/imgs/Bloom1.png" alt="Bloom — imagem 1">
-        </div>
-        <p class="rotulo">Branding</p>
-        <h3>Bloom Coffee</h3>
+        <span class="pasta-aba">Branding</span>
+        <div class="capa"><img src="Assets/imgs/Bloom1.png" alt="Bloom Coffee — imagem de capa"></div>
+        <div class="pasta-frente"><h3>Bloom Coffee</h3><span class="pasta-abrir">Abrir ↗</span></div>
       </a>
 
-      <!-- Card do projeto MARCA PESSOAL -->
+      <!-- Marca Pessoal -->
       <a class="projeto entrada-baixo" href="projeto5.pessoal.html">
-        <div class="capa">
-          <img src="Assets/imgs/marca1.png" alt="Marca — imagem 1">
-        </div>
-        <p class="rotulo">Branding</p>
-        <h3>Marca Pessoal</h3>
+        <span class="pasta-aba">Branding</span>
+        <div class="capa"><img src="Assets/imgs/marca1.png" alt="Marca Pessoal — imagem de capa"></div>
+        <div class="pasta-frente"><h3>Marca Pessoal</h3><span class="pasta-abrir">Abrir ↗</span></div>
       </a>
 
-      <!-- Card do projeto LUMINA -->
+      <!-- LUMINA -->
       <a class="projeto entrada-baixo" href="projeto6.lumina.html">
-        <div class="capa">
-          <img src="Assets/imgs/Lumina.1.jpg" alt="Projeto LUMINA">
-        </div>
-        <p class="rotulo">Branding</p>
-        <h3>LUMINA</h3>
+        <span class="pasta-aba">Branding</span>
+        <div class="capa"><img src="Assets/imgs/Lumina.1.jpg" alt="LUMINA — imagem de capa"></div>
+        <div class="pasta-frente"><h3>LUMINA</h3><span class="pasta-abrir">Abrir ↗</span></div>
       </a>
 
-      <!-- Card do projeto Vivarium -->
+      <!-- Vivarium -->
       <a class="projeto entrada-baixo" href="projeto7.vivarium.html">
-        <div class="capa">
-          <img src="Assets/imgs/vivarium1.png" alt="vivarium — imagem 1">
-        </div>        
-        <p class="rotulo">Afiches</p>
-        <h3>Vivarium</h3>
+        <span class="pasta-aba">Afiches</span>
+        <div class="capa"><img src="Assets/imgs/vivarium1.png" alt="Vivarium — imagem de capa"></div>
+        <div class="pasta-frente"><h3>Vivarium</h3><span class="pasta-abrir">Abrir ↗</span></div>
       </a>
 
     </div>
+
+    <p class="filtros-vazio" id="filtrosVazio" hidden>Ainda não há projetos nesta categoria.</p>
   </section>
 
   <!-- RODAPÉ -->

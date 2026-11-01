@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sergio Andrade | Designer Multimídia</title>
+  <title>Sergio Andrade | Designer Multimédia</title>
   <meta name="description" content="Portfólio de Sergio Andrade, designer multimédia.">
   <link rel="icon" href="Assets/imgs/minha.logo.png">
 
@@ -39,13 +39,80 @@
 
   <!-- HOME -->
   <section id="home">
-    <img class="nome" src="Assets/imgs/meu nome logo.png" alt="Sergio Andrade">
+    <!-- PAREDE com luz de cima; o crachá está pendurado numa fita e projeta sombra -->
+    <div class="parede" aria-hidden="true"></div>
 
-    <div class="anel">
-      <img src="Assets/imgs/minha foto perfil.png" alt="Foto de Sergio Andrade">
+    <div class="cracha-palco" id="crachaPalco">
+      <svg class="corda" id="corda" aria-hidden="true">
+        <defs>
+          <radialGradient id="metalAncora" cx="35%" cy="30%" r="75%">
+            <stop offset="0" stop-color="#fbfcff"/>
+            <stop offset="0.55" stop-color="#9aa4c0"/>
+            <stop offset="1" stop-color="#56617c"/>
+          </radialGradient>
+        </defs>
+        <!-- fita do cordão: contorno, cor, brilho e o texto estampado -->
+        <path class="fita-borda" data-fita fill="none"/>
+        <path class="fita-corpo" data-fita fill="none"/>
+        <path class="fita-brilho" data-fita fill="none"/>
+        <path id="fitaGuia" data-fita fill="none" stroke="none"/>
+        <text class="fita-texto"><textPath href="#fitaGuia" startOffset="6%">SERGIO ANDRADE · DESIGNER MULTIMÉDIA · SERGIO ANDRADE · DESIGNER MULTIMÉDIA · SERGIO ANDRADE ·</textPath></text>
+        <!-- prego na parede onde a fita está presa -->
+        <circle id="cordaAncora" r="11" fill="url(#metalAncora)"/>
+        <circle id="cordaAncora2" r="4" fill="#3b4568"/>
+      </svg>
+
+      <div class="cracha" id="cracha">
+        <div class="cracha-sombra" id="crachaSombra"></div>
+
+        <div class="cracha-giro" id="crachaGiro" tabindex="0" aria-label="Crachá de Sergio Andrade. Clica ou carrega em Enter para virar.">
+
+          <!-- FRENTE -->
+          <div class="cara cara-frente">
+            <div class="cracha-banda">
+              <span class="cracha-furo"></span>
+              <p class="cracha-topo"></p>
+            </div>
+            <div class="cracha-corpo">
+              <div class="cracha-foto">
+                <img src="Assets/imgs/minha foto perfil.png" alt="Foto de Sergio Andrade" draggable="false">
+              </div>
+              <h1 class="cracha-nome">Sergio Andrade</h1>
+              <p class="cracha-funcao">Designer multimédia</p>
+              <div class="cracha-fim">
+                <div class="cracha-barras"></div>
+                <p class="cracha-dica">Clica para virar ↻</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- VERSO -->
+          <div class="cara cara-verso">
+            <div class="cracha-banda cracha-banda-laranja">
+              <span class="cracha-furo"></span>
+              <p class="cracha-topo">Contatos</p>
+            </div>
+            <div class="cracha-corpo">
+              <h2 class="cracha-titulo">Vamos conversar?</h2>
+              <p class="cracha-lema">Experimentar, testar e evoluir.</p>
+              <ul class="cracha-lista">
+                <li><small>Email</small><a href="Sergioa.sf@icloud.com">Sergioa.sf@icloud.com</a></li>
+                <li><small>Behance</small><a href="https://www.behance.net/sergioasf" target="_blank" rel="noopener">behance.net/sergioasf</a></li>
+                <li><small>Instagram</small><a href="https://www.instagram.com/bysergio.a/" target="_blank" rel="noopener">@bysergio.a</a></li>
+                <li><small>LinkedIn</small><a href="https://www.linkedin.com/in/sergioasf/" target="_blank" rel="noopener">in/sergioasf</a></li>
+              </ul>
+              <div class="cracha-fim">
+                <div class="cracha-barras"></div>
+                <p class="cracha-dica">Clica para virar ↻</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mola metálica por cima (não vira com o crachá) -->
+        <div class="cracha-clip" aria-hidden="true"></div>
+      </div>
     </div>
-
-    <p class="etiqueta vidro">Designer multimídia</p>
 
     <!-- Seta que leva ao Sobre -->
     <a href="#sobre" class="seta-baixo" aria-label="Ver sobre mim">
@@ -57,19 +124,47 @@
 
   <!-- SOBRE -->
   <section id="sobre">
+    <!-- Palco fixo: a página pára aqui e o scroll controla a impressão -->
+    <div class="sobre-palco">
     <div class="sobre-layout">
       <!-- Lado esquerdo: o teu gif com sombra no chão -->
       <div class="sobre-personagem entrada-esquerda">
         <img class="sobre-gif" src="Assets/imgs/meu.gif.gif" alt="Animação do meu personagem">
       </div>
 
-      <!-- Lado direito: caixa com o texto -->
-      <div class="sobre-caixa vidro entrada-direita">
-        <p class="rotulo">Sobre mim</p>
-        <h2>Prazer, Sergio </h2>
-        <p>O design, para mim, é uma forma de transformar ideias em experiências visuais. É explorar, experimentar e encontrar novas maneiras de comunicar aquilo que nem sempre precisa de ser dito com palavras.</p>
-        <p>Mais do que seguir uma fórmula, acredito no processo de experimentar, testar e evoluir. Cada projeto é uma oportunidade de aprender algo novo.</p>
+      <!-- Lado direito: impressora. O scroll puxa a folha e imprime o texto -->
+      <div class="impressora entrada-direita">
+        <div class="imp-cena" id="impCena">
+
+          <!-- Folha em branco (sai por trás da impressora) -->
+          <div class="imp-folha" id="impFolha" aria-hidden="true"></div>
+
+          <!-- Corpo da impressora -->
+          <div class="imp-corpo" id="impCorpo">
+            <span class="imp-bocal"></span>
+            <div class="imp-tampa"></div>
+            <span class="imp-marca">SA&middot;100</span>
+            <div class="imp-ventilas"></div>
+            <div class="imp-painel">
+              <span class="imp-led"></span>
+              <span class="imp-lcd" id="impLcd">PRONTO</span>
+            </div>
+            <span class="imp-fenda"></span>
+          </div>
+
+          <!-- Folha impressa (sai pela fenda da frente) -->
+          <div class="imp-saida" id="impSaida">
+            <div class="imp-papel" id="impPapel">
+              <p class="rotulo">Sobre mim</p>
+              <h2>Olá, sou o Sergio</h2>
+              <p>O design, para mim, é uma forma de transformar ideias em experiências visuais. É explorar, experimentar e encontrar novas maneiras de comunicar aquilo que nem sempre precisa de ser dito com palavras.</p>
+              <p>Mais do que seguir uma fórmula, acredito no processo de experimentar, testar e evoluir. Cada projeto é uma oportunidade de aprender algo novo.</p>
+              <p class="imp-assinatura">Sergio</p>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
     </div>
   </section>
 
@@ -113,49 +208,38 @@
       <p class="rotulo">Habilidades</p>
     </div>
 
-    <div class="habilidades-marquee-container vidro entrada-baixo">
-      <!-- Linha 1 -->
-      <div class="marquee-linha marquee-esquerda">
-        <div class="marquee-grupo">
-          <span>Identidade visual</span>
-          <span>Branding</span>
-          <span>Ilustrações</span>
-          <span>Design editorial</span>
-          <span>UX/UI</span>
-          <span>Motion design</span>
-        </div>
-        <div class="marquee-grupo" aria-hidden="true">
-          <span>Identidade visual</span>
-          <span>Branding</span>
-          <span>Ilustrações</span>
-          <span>Design editorial</span>
-          <span>UX/UI</span>
-          <span>Motion design</span>
-        </div>
+    <div class="caixa-tags-ext entrada-baixo">
+      <div class="caixa-tags vidro" id="caixaTags">
+        <!--
+          COMO ADICIONAR UMA HABILIDADE:
+          copia uma linha <li> abaixo e muda só o texto. Cada <li> vira uma peça do Tetris.
+          data-forma escolhe o formato da peça: I, O, T, L, J, S ou Z
+          (podes deixar o data-forma de fora e o site escolhe sozinho).
+        -->
+        <ul class="tags-lista" id="tagsLista" aria-label="Habilidades">
+          <li class="tag" data-forma="L">Identidade visual</li>
+          <li class="tag" data-forma="T">Branding</li>
+          <li class="tag" data-forma="J">Ilustrações</li>
+          <li class="tag" data-forma="S">Design editorial</li>
+          <li class="tag" data-forma="L">UX</li>
+          <li class="tag" data-forma="J">UI</li>
+          <li class="tag" data-forma="Z">Motion design</li>
+          <li class="tag" data-forma="J">Marketing digital</li>
+          <li class="tag" data-forma="L">Cartazes</li>
+          <li class="tag" data-forma="I">Tipografia</li>
+          <li class="tag" data-forma="T">Programação</li>
+          <li class="tag" data-forma="L">Landing pages</li>
+          <li class="tag" data-forma="T">Idealização de marca</li>
+        </ul>
       </div>
-
-      <!-- Linha 2 -->
-      <div class="marquee-linha marquee-direita">
-        <div class="marquee-grupo">
-          <span>Marketing digital</span>
-          <span>Cartazes</span>
-          <span>Tipografia</span>
-          <span>Programação</span>
-          <span>Landing pages</span>
-          <span>Idealização de marca</span>
-        </div>
-        <div class="marquee-grupo" aria-hidden="true">
-          <span>Marketing digital</span>
-          <span>Cartazes</span>
-          <span>Tipografia</span>
-          <span>Programação</span>
-          <span>Landing pages</span>
-          <span>Idealização de marca</span>
-        </div>
-      </div>
+      <p class="tags-dica" id="tagsDica">Cada habilidade é uma peça</p>
     </div>
   </section>
 
+
+
+
+        
 
   <!-- PROCESSO -->
   <section id="processo" class="sobre-extra">
@@ -163,23 +247,28 @@
       <p class="rotulo">Processo</p>
     </div>
 
+    <!--
+      MURAL DO PROCESSO: cada <li> vira um papel preso na cortiça.
+      Para adicionar um passo, copia um <li> e muda o texto.
+      data-icone escolhe o desenho à mão: ouvir, explorar, criar ou refinar.
+    -->
     <ol class="processo-lista">
-      <li class="passo vidro entrada-baixo">
+      <li class="passo vidro entrada-baixo" data-icone="ouvir">
         <span class="passo-numero">1</span>
         <h3>Ouvir</h3>
         <p>Entender a marca, o público e o objetivo antes de desenhar qualquer coisa.</p>
       </li>
-      <li class="passo vidro entrada-baixo">
+      <li class="passo vidro entrada-baixo" data-icone="explorar">
         <span class="passo-numero">2</span>
         <h3>Explorar</h3>
-        <p>Referências, croquis, e muitas ideias para cada projeto, seja ele de qual área for.</p>
+        <p>Referências, croquis soltos e muitas ideias em cima da mesa.</p>
       </li>
-      <li class="passo vidro entrada-baixo">
+      <li class="passo vidro entrada-baixo" data-icone="criar">
         <span class="passo-numero">3</span>
         <h3>Criar</h3>
         <p>Dar forma ao conceito escolhido, com cor, tipografia e composição.</p>
       </li>
-      <li class="passo vidro entrada-baixo">
+      <li class="passo vidro entrada-baixo" data-icone="refinar">
         <span class="passo-numero">4</span>
         <h3>Refinar</h3>
         <p>Testar, ajustar os detalhes e entregar tudo pronto a usar.</p>
@@ -194,12 +283,137 @@
 
   <!-- CONVITE FINAL -->
   <section id="conversa" class="sobre-extra">
-    <div class="cta vidro entrada-baixo">
-      <h2>Vamos criar algo juntos?</h2>
-      <p>Tem um projeto em mente? Me conta a sua ideia e vamos fazer acontecer.</p>
-      <div class="cta-botoes">
-        <a class="botao" href="mailto:sergiodandrade2013@gmail.com">Enviar email</a>
-        <a class="botao botao-vidro" href="https://www.behance.net/sergioasf" target="_blank" rel="noopener">Ver Behance</a>
+    <div class="cta correio vidro entrada-baixo">
+
+      <!-- Contacto direto: fica sempre visível, sem precisar de girar nada -->
+      <div class="correio-texto">
+        <h2>Vamos criar algo juntos?</h2>
+        <p>Tem um projeto em mente? Conta a sua ideia e vemos como desenvolver ela!</p>
+        <div class="cta-botoes">
+          <a class="botao" href="mailto:o-teu-email@exemplo.com">Enviar email</a>
+          <a class="botao botao-vidro" href="https://www.behance.net/sergioasf" target="_blank" rel="noopener">Ver Behance</a>
+        </div>
+        <p class="correio-dica" id="correioDica">Gire a manivela do correio &#8635;</p>
+      </div>
+
+      <!-- Caixa de correio com manivela -->
+      <div class="correio-cena" id="correioCena">
+        <svg class="correio-svg" id="correioSvg" viewBox="0 -70 440 510" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="gAzul" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#3a62c8"/>
+              <stop offset="0.55" stop-color="#2547a0"/>
+              <stop offset="1" stop-color="#14266b"/>
+            </linearGradient>
+            <linearGradient id="gMadeira" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#9a6a3c"/>
+              <stop offset="0.5" stop-color="#7a4e2a"/>
+              <stop offset="1" stop-color="#5a371c"/>
+            </linearGradient>
+            <radialGradient id="gMetal" cx="0.35" cy="0.3" r="0.8">
+              <stop offset="0" stop-color="#fbfcff"/>
+              <stop offset="0.5" stop-color="#9aa4c0"/>
+              <stop offset="1" stop-color="#56617c"/>
+            </radialGradient>
+            <radialGradient id="gLaranja" cx="0.35" cy="0.3" r="0.8">
+              <stop offset="0" stop-color="#ffb08f"/>
+              <stop offset="0.55" stop-color="#f2784b"/>
+              <stop offset="1" stop-color="#b3431c"/>
+            </radialGradient>
+            <clipPath id="cortaCarta"><rect x="-20" y="-120" width="480" height="218"/></clipPath>
+          </defs>
+
+          <ellipse cx="175" cy="428" rx="125" ry="11" fill="rgba(5,10,40,0.35)"/>
+
+          <!-- poste -->
+          <rect x="155" y="262" width="40" height="166" fill="url(#gMadeira)"/>
+          <rect x="150" y="258" width="50" height="14" rx="3" fill="#5a371c"/>
+
+          <g id="correioTremer">
+            <!-- corpo -->
+            <path d="M40 270 V160 C40 110 95 88 175 88 C255 88 310 110 310 160 V270 Z" fill="url(#gAzul)"/>
+            <path d="M52 262 V162 C52 122 100 102 175 102" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="6" stroke-linecap="round"/>
+            <path d="M40 252 H310 V270 H40 Z" fill="rgba(0,0,0,0.25)"/>
+            <path d="M70 262 V168 C70 138 110 122 175 122 C240 122 280 138 280 168 V262" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
+            <rect x="105" y="188" width="140" height="38" rx="6" fill="#e8c36a" stroke="#a87a1e" stroke-width="2"/>
+            <text x="175" y="216" text-anchor="middle" font-family="'Lilita One', sans-serif" font-size="25" fill="#7a4e2a" letter-spacing="2">CORREIO</text>
+
+            <!-- fenda por onde saem as cartas -->
+            <ellipse cx="175" cy="94" rx="62" ry="7" fill="#0b1442"/>
+            <ellipse cx="175" cy="92.5" rx="62" ry="5" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+
+            <!-- carta: só se vê acima da fenda -->
+            <g clip-path="url(#cortaCarta)">
+              <g id="cartaSVG">
+                <rect x="127" y="100" width="96" height="120" rx="3" fill="#f5f1e9" stroke="rgba(20,38,107,0.3)"/>
+                <path d="M127 100 L175 150 L223 100" fill="none" stroke="rgba(20,38,107,0.25)" stroke-width="1.5"/>
+                <circle cx="175" cy="150" r="13" fill="#e8532c"/>
+                <circle cx="175" cy="150" r="8" fill="none" stroke="rgba(255,255,255,0.5)"/>
+                <rect x="196" y="106" width="20" height="24" fill="#f2784b"/>
+                <rect x="199" y="109" width="14" height="18" fill="none" stroke="rgba(255,255,255,0.7)" stroke-dasharray="2 2"/>
+              </g>
+            </g>
+
+            <!-- bandeira: sobe quando a carta sai -->
+            <g id="bandeira">
+              <rect x="36" y="205" width="8" height="78" rx="3" fill="#b9c2dc"/>
+              <rect x="25" y="270" width="30" height="20" rx="3" fill="#f2784b"/>
+            </g>
+            <circle cx="40" cy="205" r="7" fill="url(#gMetal)"/>
+
+            <!-- manivela -->
+            <path id="manivelaDica" d="M371.3 153.6 A80 80 0 0 1 371.3 256.4" fill="none" stroke="#f2784b" stroke-width="3" stroke-dasharray="4 7" stroke-linecap="round"/>
+            <path id="manivelaSeta" d="M362 262 L374 258 L368 247" fill="none" stroke="#f2784b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="310" cy="205" r="30" fill="url(#gMetal)" stroke="#3b4568" stroke-width="2"/>
+            <g id="manivelaGira">
+              <rect x="302" y="198" width="66" height="14" rx="7" fill="url(#gMetal)" stroke="#3b4568" stroke-width="1.5"/>
+              <circle cx="368" cy="205" r="14" fill="url(#gLaranja)" stroke="#7a2e10" stroke-width="1.5"/>
+              <circle cx="364" cy="200" r="4" fill="rgba(255,255,255,0.55)"/>
+            </g>
+            <circle cx="310" cy="205" r="9" fill="#2b3566"/>
+          </g>
+        </svg>
+
+        <!-- área onde se pega na manivela (rato, dedo ou teclado) -->
+        <div class="manivela-alvo" id="manivelaAlvo" role="button" tabindex="0"
+             aria-label="Girar a manivela para tirar uma carta do correio"></div>
+      </div>
+    </div>
+
+    <!-- Carta ampliada. Para mudar o conteúdo, edita os <article> abaixo. -->
+    <div class="carta-overlay" id="cartaOverlay" aria-hidden="true">
+      <div class="carta" id="carta" role="dialog" aria-modal="true" aria-label="Carta do correio">
+        <div class="carta-fechada" aria-hidden="true"><span class="carta-selo">S</span></div>
+        <div class="carta-aberta">
+          <button type="button" class="carta-fechar" id="cartaFechar" aria-label="Fechar carta">&times;</button>
+
+          <!-- Carta 1: contactos -->
+          <article class="carta-conteudo">
+            <p class="rotulo">Carta 1 &middot; Contactos</p>
+            <h2>Vamos criar algo juntos?</h2>
+            <p>Me conta a sua ideia. Respondo assim que possível.</p>
+            <ul class="carta-contactos">
+              <li>
+                <small>Email</small>
+                <a href="mailto:o-teu-email@exemplo.com">Sergioa.sf@icloud.com</a>
+                <button type="button" class="carta-copiar" data-copiar="o-teu-email@exemplo.com">Copiar</button>
+              </li>
+              <li><small>Behance</small><a href="https://www.behance.net/sergioasf" target="_blank" rel="noopener">behance.net/sergioasf</a></li>
+              <li><small>Instagram</small><a href="https://www.instagram.com/bysergio.a/" target="_blank" rel="noopener">@bysergio.a</a></li>
+              <li><small>LinkedIn</small><a href="https://www.linkedin.com/in/sergioasf/" target="_blank" rel="noopener">in/sergioasf</a></li>
+            </ul>
+            <p class="carta-assinatura">Sergio</p>
+          </article>
+
+          <!-- Carta 2: projetos -->
+          <article class="carta-conteudo" hidden>
+            <p class="rotulo">Carta 2 &middot; Projetos</p>
+            <h2>Quer ver o que já fiz?</h2>
+            <p>Identidades, ilustrações, cartazes e mais. Passa pela galeria de projetos e vê como cada ideia ganhou forma.</p>
+            <a class="botao carta-botao" href="projetos.html">Ver projetos</a>
+            <p class="carta-assinatura">Sergio</p>
+          </article>
+        </div>
       </div>
     </div>
   </section>
@@ -210,7 +424,7 @@
   <footer>
     <p>© <span id="ano"></span> Sergio Andrade</p>
     <nav class="redes">
-      <a href="mailto:sergiodandrade2013@gmail.com">Email</a>
+      <a href="mailto:o-teu-email@exemplo.com">Email</a>
       <a href="https://www.behance.net/sergioasf" target="_blank" rel="noopener">Behance</a>
       <a href="https://www.instagram.com/bysergio.a/?utm_source=ig_web_button_share_sheet" target="_blank" rel="noopener">Instagram</a>
       <a href="https://www.linkedin.com/in/sergioasf/" target="_blank" rel="noopener">LinkedIn</a>
