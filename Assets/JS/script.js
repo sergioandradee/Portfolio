@@ -67,11 +67,13 @@ document.getElementById('ano').textContent = new Date().getFullYear();
 // ----- Parallax do granulado -----
 const velocidadeGrao = 0.4;
 
-if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+// (no telemóvel não se faz: mexer numa camada fixa inteira a cada scroll pesa na bateria)
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+    window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
   window.addEventListener('scroll', function () {
     const grao = (window.scrollY * velocidadeGrao) % 240;
     document.body.style.setProperty('--grao', grao + 'px');
-  });
+  }, { passive: true });
 }
 
 // ----- Sobre: entrada pelos lados, repete sempre que a secção aparece -----
@@ -270,7 +272,9 @@ entradasSobre.forEach(function (elemento) {
   ];
 
   function ajustar() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    // no telemóvel as ondas são suaves: não precisam de resolução dupla (poupa bateria)
+    const pequeno = window.matchMedia('(max-width: 700px)').matches;
+    const dpr = Math.min(window.devicePixelRatio || 1, pequeno ? 1 : 2);
     largura = window.innerWidth;
     altura = window.innerHeight;
     canvas.width = largura * dpr;
@@ -783,6 +787,7 @@ if (etiqueta) {
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (entradas) {
       visivel = entradas[0].isIntersecting;
+      home.classList.toggle('fora', !visivel); // pára o degradé animado quando não se vê
       if (visivel) acordar();
     }).observe(home);
   }
@@ -867,7 +872,7 @@ if (etiqueta) {
     let texto = 'PRONTO';
     if (imp >= 1) texto = 'CONCLUÍDO';
     else if (imp > 0) texto = 'IMPRIMINDO';
-    else if (entrada > 0) texto = 'PUXANDO...';
+    else if (entrada > 0) texto = 'A PUXAR...';
     if (lcd.textContent !== texto) lcd.textContent = texto;
 
     const mexeu = Math.abs(p - anterior) > 0.0003;
@@ -1305,7 +1310,7 @@ if (etiqueta) {
     acabou = false;
     tabuleiro.innerHTML = '';
     if (botao) botao.hidden = true;
-    dizer('Encaixando as habilidades...');
+    dizer('A encaixar as habilidades...');
 
     if (reduzir) {
       // sem animação: já aparece tudo encaixado
@@ -1793,7 +1798,7 @@ if (etiqueta) {
   // ---------- arranque ----------
   mural.insertAdjacentHTML(
     'afterend',
-    '<p class="mural-dica">' + (temRato ? 'Arraste os papéis do mural' : 'Toca nos papéis') + '</p>'
+    '<p class="mural-dica">' + (temRato ? 'Arrasta os papéis do mural' : 'Toca nos papéis') + '</p>'
   );
 
   let larguraAnterior = 0;

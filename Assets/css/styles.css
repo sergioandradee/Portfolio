@@ -1292,7 +1292,6 @@ body.saindo {
     radial-gradient(circle at 18% 22%, #f2784b 0, transparent 40%),
     radial-gradient(circle at 82% 78%, #3a62c8 0, transparent 46%);
   animation: paredeA 22s ease-in-out infinite alternate;
-  opacity: 0.65;
 }
 
 .parede::after {
@@ -2362,7 +2361,7 @@ body.saindo {
 .mural-dica {
   margin: 1.2rem 0 0;
   text-align: center;
-  font-size: 0.55rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -2389,11 +2388,10 @@ body.saindo {
 }
 
 .correio .correio-texto .correio-dica {
-  margin: 2rem 0 0;
-  font-size: 0.60rem;
+  margin: 1.6rem 0 0;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.16em;
-  text-align: center;
   text-transform: uppercase;
   color: var(--lilas);
 }
@@ -3305,5 +3303,89 @@ body.lb-aberto {
 
   .projeto.volta {
     animation: none;
+  }
+}
+
+
+
+/* =========================================================
+   OTIMIZAÇÃO PARA TELEMÓVEL
+   ========================================================= */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* toque imediato (sem atraso) e sem o clarão cinzento do navegador */
+a,
+button,
+[role="button"],
+.filtro,
+.nota,
+.manivela-alvo {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* degradé animado da Home só mexe enquanto está à vista */
+#home.fora .parede::before,
+#home.fora .parede::after {
+  animation-play-state: paused;
+}
+
+@media (max-width: 700px) {
+  /* alvos de toque de pelo menos 44px */
+  .botao-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+  }
+
+  .redes {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0 0.6rem;
+  }
+
+  .redes a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 0.5rem;
+  }
+
+  .cracha-lista a {
+    padding: 0.3em 0;
+  }
+
+  .carta-copiar {
+    min-height: 2.4rem;
+    padding: 0 1rem;
+  }
+
+  .filtro {
+    min-height: 44px;
+  }
+
+  /* o efeito de vidro desfocado pesa muito em telemóveis: raio mais pequeno */
+  .vidro {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+
+  footer {
+    padding-bottom: 2rem;
+  }
+}
+
+/* telemóveis baixos / deitados: dá mais folga ao crachá e à seta */
+@media (max-height: 560px) {
+  #home .seta-baixo {
+    bottom: 0.8rem;
+    width: 44px;
+    height: 44px;
   }
 }
