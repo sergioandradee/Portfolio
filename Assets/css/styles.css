@@ -3389,3 +3389,20 @@ button,
     height: 44px;
   }
 }
+
+/* ---------- MENU NO TELEMÓVEL: a logo não tapa os links ---------- */
+@media (max-width: 700px) {
+  /* a logo fica sempre alinhada com a primeira linha (botão ☰), mesmo com o menu aberto */
+  .menu .logo {
+    top: 44px;
+  }
+
+  /* com o menu aberto, os links começam abaixo da logo */
+  .menu.aberto nav {
+    padding-top: 56px;
+  }
+
+  .menu.aberto {
+    padding-bottom: 0.4rem;
+  }
+}
