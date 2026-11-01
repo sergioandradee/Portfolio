@@ -14,6 +14,18 @@ links.forEach(function (link) {
   });
 });
 
+// ----- Menu do telemóvel: mostra os nomes na barra; se não couberem, usa o botão ☰ -----
+function ajustarMenu() {
+  menu.classList.remove('hamb');
+  if (window.innerWidth > 700) return;
+  const nav = document.getElementById('links');
+  if (nav.scrollWidth > nav.clientWidth + 1) menu.classList.add('hamb');
+}
+ajustarMenu();
+window.addEventListener('resize', ajustarMenu);
+window.addEventListener('load', ajustarMenu);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(ajustarMenu);
+
 // ----- Menu fica mais sólido quando se desce a página -----
 window.addEventListener('scroll', function () {
   menu.classList.toggle('rolou', window.scrollY > 20);
