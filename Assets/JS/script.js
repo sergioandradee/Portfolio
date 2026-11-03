@@ -1163,6 +1163,7 @@ if (etiqueta) {
   }
 
   function mover() {
+    if (saltando) { correndo = false; return; } // durante o pulo entre páginas quem manda é o pulo
     atual += (alvo - atual) * SUAVE;
     if (Math.abs(alvo - atual) < 0.5) atual = alvo;
     meu = true;
@@ -1191,15 +1192,180 @@ if (etiqueta) {
     return false;
   }
 
+  // ---- Páginas: entre uma secção e outra o scroll "pesa" e depois dá um pulo suave ----
+  const RESISTENCIA = 220; // quanto é preciso empurrar (em px de scroll) para passar de página; 0 = sem resistência
+  const CEDER = 0.1;       // quanto a página cede enquanto empurras (0.1 = 10% do empurrão)
+  const CEDER_MAX = 28;    // o máximo que ela cede, em px (é o "elástico")
+  const DURACAO = 850;     // duração do pulo para a página seguinte, em milissegundos
+  const DESCANSO = 450;    // pausa depois do pulo (evita passar duas páginas de uma vez)
+
+  let gate = null;         // empurrão em curso contra o fim/início de uma página
+  let timerGate = 0;
+  let saltando = false;
+  let livreEm = 0;
+  let ultimaRoda = 0;
+
+  // Cada página: S = onde começa, E = onde acaba (posição do scroll quando o fim dela encosta no fundo do ecrã)
+  function paginas() {
+    const y = window.scrollY;
+    const vh = window.innerHeight;
+    const lista = [];
+    const defs = [
+      ['home', null],
+      ['sobre', null],
+      ['habilidades', null],
+      ['processo', null],
+      ['conversa', null]
+    ];
+    defs.forEach(function (d, n) {
+      const el = document.getElementById(d[0]);
+      if (!el) return;
+      const fim = d[1] ? document.querySelector(d[1]) : el;
+      let S = d[0] === 'home' ? 0 : el.getBoundingClientRect().top + y; // a Home é "sticky": começa sempre em 0
+      let E = d[0] === 'home' ? 0 : (fim || el).getBoundingClientRect().bottom + y - vh;
+      if (n === defs.length - 1) E = maximo();
+      S = Math.min(S, maximo());
+      E = Math.max(S, E);
+
+      // No Processo cada um dos 4 pontos também é uma pequena "página": o personagem pára, pesa, e salta para o próximo
+      if (d[0] === 'processo' && window.paradasProcesso) {
+        const paradas = window.paradasProcesso().filter(function (p) { return p > S + 40 && p < E - 40; });
+        if (!paradas.length) { lista.push({ S: S, E: E }); return; }
+        lista.push({ S: S, E: paradas[0] });
+        for (let k = 1; k < paradas.length; k++) lista.push({ S: paradas[k], E: paradas[k] });
+        if (E > paradas[paradas.length - 1] + 40) lista.push({ S: E, E: E });
+        return;
+      }
+      lista.push({ S: S, E: E });
+    });
+    return lista;
+  }
+
+  function deslizar(destino) {
+    clearTimeout(timerGate);
+    gate = null;
+    saltando = true;
+    const ini = window.scrollY;
+    const d = destino - ini;
+    const dur = Math.max(550, Math.min(DURACAO, 450 + Math.abs(d) * 0.45));
+    const t0 = performance.now();
+    function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+    function passo(agora) {
+      const t = Math.min(1, (agora - t0) / dur);
+      meu = true;
+      window.scrollTo(0, ini + d * ease(t));
+      meu = false;
+      if (t < 1) {
+        requestAnimationFrame(passo);
+      } else {
+        saltando = false;
+        alvo = atual = window.scrollY;
+        livreEm = performance.now() + DESCANSO;
+      }
+    }
+    requestAnimationFrame(passo);
+  }
+
+  // Largou-se a roda sem chegar ao fim do empurrão: a página volta para o sítio
+  function soltar() {
+    if (!gate) return;
+    alvo = gate.ancora;
+    gate = null;
+    iniciar();
+  }
+
+  function puxar() {
+    alvo = gate.ancora + gate.dir * Math.min(gate.forca * CEDER, CEDER_MAX);
+    iniciar();
+    clearTimeout(timerGate);
+    timerGate = setTimeout(soltar, 220);
+  }
+
   window.addEventListener('wheel', function (e) {
     if (e.ctrlKey || e.defaultPrevented) return;
     if (document.body.className.match(/aberta|aberto/)) return; // galeria, carta ou lightbox abertos
     if (temScrollProprio(e.target)) return;
     e.preventDefault();
+    const agora = performance.now();
+    const fluxo = agora - ultimaRoda < 100; // a roda/dedo ainda vem a correr (inércia do trackpad)
+    ultimaRoda = agora;
+    if (saltando) return;
+    if (agora < livreEm) { livreEm = Math.max(livreEm, agora + (fluxo ? 120 : 0)); return; }
+
     const k = e.deltaMode === 1 ? 32 : e.deltaMode === 2 ? window.innerHeight : 1;
-    if (!correndo) { alvo = atual = window.scrollY; }
-    alvo = limitar(alvo + e.deltaY * k * FORCA);
-    iniciar();
+    const dy = e.deltaY * k * FORCA;
+    if (!dy) return;
+    const dir = dy > 0 ? 1 : -1;
+
+    if (!correndo && !gate) { alvo = atual = window.scrollY; }
+    const lista = paginas();
+    const pos = gate ? gate.ancora : alvo;
+    const T = 3;
+
+    // 1) já está a empurrar contra uma "porta"
+    if (gate) {
+      if (dir === gate.dir) {
+        if (gate.chegou && agora - gate.chegou < 130) { clearTimeout(timerGate); timerGate = setTimeout(soltar, 220); return; }
+        gate.forca += Math.min(Math.abs(dy), 80);
+        if (gate.forca >= RESISTENCIA) {
+          const i = gate.i;
+          const destino = dir > 0 ? lista[i + 1].S : lista[i - 1].E;
+          deslizar(destino);
+        } else {
+          puxar();
+        }
+      } else {
+        gate.forca -= Math.abs(dy) * 1.5;
+        if (gate.forca <= 0) {
+          const base = gate.ancora;
+          clearTimeout(timerGate);
+          gate = null;
+          alvo = limitar(base + dy);
+          iniciar();
+        } else {
+          puxar();
+        }
+      }
+      return;
+    }
+
+    // 2) onde estamos? (dentro de uma página, ou no espaço entre duas)
+    let i = -1;
+    for (let n = 0; n < lista.length; n++) {
+      if (pos >= lista[n].S - T && pos <= lista[n].E + T) { i = n; break; }
+    }
+    if (i === -1) {
+      // fora de qualquer página: vai para a mais próxima na direção do scroll
+      let destino = null;
+      if (dir > 0) { for (let n = 0; n < lista.length; n++) if (lista[n].S > pos) { destino = lista[n].S; break; } }
+      else { for (let n = lista.length - 1; n >= 0; n--) if (lista[n].E < pos) { destino = lista[n].E; break; } }
+      if (destino === null) { alvo = limitar(pos + dy); iniciar(); return; }
+      deslizar(destino);
+      return;
+    }
+
+    const pg = lista[i];
+    const novo = pos + dy;
+    const temPorta = dir > 0 ? i < lista.length - 1 : i > 0;
+
+    if (!temPorta || RESISTENCIA <= 0) {
+      if (RESISTENCIA <= 0 && temPorta && (dir > 0 ? novo > pg.E : novo < pg.S)) { deslizar(dir > 0 ? lista[i + 1].S : lista[i - 1].E); return; }
+      alvo = limitar(novo);
+      iniciar();
+      return;
+    }
+
+    if (dir > 0 ? novo <= pg.E : novo >= pg.S) {
+      // ainda dentro da página: scroll normal
+      alvo = limitar(novo);
+      iniciar();
+      return;
+    }
+
+    // chegou ao fim (ou ao início) da página: pára aqui e começa a "pesar"
+    gate = { i: i, dir: dir, forca: 0, ancora: dir > 0 ? pg.E : pg.S, chegou: fluxo ? agora : 0 };
+    if (!fluxo) gate.forca = Math.min(Math.abs(dy), 80); // um empurrão novo já conta
+    puxar();
   }, { passive: false });
 
   // Se o scroll mudar por outro motivo (teclado, barra de scroll), acompanha
@@ -1217,6 +1383,7 @@ if (etiqueta) {
     if (!id) { e.preventDefault(); alvo = 0; if (!correndo) atual = window.scrollY; iniciar(); return; }
     if (!el) return;
     e.preventDefault();
+    gate = null;
     if (!correndo) atual = window.scrollY;
     alvo = limitar(el.getBoundingClientRect().top + window.scrollY);
     iniciar();
@@ -1978,8 +2145,11 @@ if (etiqueta) {
       pts.push(p);
       ys.push(p.y);
     });
-    pts.push({ x: pts[1].x, y: H });
-    pts[pts.length - 1].x = window.innerWidth > 700 ? W / 2 : 24;
+    // a trilha acaba mesmo por cima do texto de fecho
+    const estreito = window.innerWidth <= 700;
+    const fim = document.getElementById('trilhaFim');
+    const textoFim = fim && fim.querySelector('.trilha-fim-texto');
+    pts.push({ x: estreito ? 24 : W / 2, y: textoFim ? textoFim.getBoundingClientRect().top - tr.top - 14 : H });
 
     let d = 'M' + pts[0].x.toFixed(1) + ' ' + pts[0].y.toFixed(1);
     for (let i = 1; i < pts.length; i++) {
@@ -2059,6 +2229,12 @@ if (etiqueta) {
     atual = alvo;
     pintar();
   }
+
+  // Posições de scroll em que o personagem está em cada um dos 4 pontos (usadas pelas "paradas" de página)
+  window.paradasProcesso = function () {
+    const tr = trilha.getBoundingClientRect();
+    return ys.map(function (v) { return tr.top + window.scrollY + v - window.innerHeight * LINHA; });
+  };
 
   window.addEventListener('scroll', acordar, { passive: true });
   window.addEventListener('resize', function () { tudo(); });

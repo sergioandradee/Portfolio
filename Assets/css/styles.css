@@ -4329,3 +4329,43 @@ button,
   box-shadow: 0 0 24px rgba(242, 120, 75, 0.8);
 }
 
+
+
+/* ---------- PROCESSO: o fim "fecha" a página ---------- */
+.processo-secao {
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-bottom: 5rem;
+}
+
+/* o universo termina com uma borda limpa em baixo (só nasce suave em cima) */
+.processo-universo {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 220px, #000 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 220px, #000 100%);
+}
+
+.trilha-fim {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 4rem 0 0;
+  text-align: center;
+}
+
+.trilha-fim-texto {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  color: var(--claro);
+}
+
+@media (max-width: 700px) {
+  .trilha-fim {
+    align-items: flex-start;
+    padding-left: 70px;
+    text-align: left;
+  }
+}
