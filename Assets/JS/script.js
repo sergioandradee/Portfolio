@@ -454,7 +454,21 @@ if (etiqueta) {
   const fitas = Array.prototype.slice.call(document.querySelectorAll('#corda [data-fita]'));
   const ancora = document.getElementById('cordaAncora');
   const ancora2 = document.getElementById('cordaAncora2');
-  if (!home || !cracha || !giro || !corda) return;
+  const nomeEl = document.getElementById('homeNome');
+  const cargoEl = document.getElementById('homeCargo');
+  const menuEl = document.querySelector('.menu');
+  if (!home || !cracha || !giro || !corda || !nomeEl || !cargoEl) return;
+
+  // Parte o nome em letras, para a abertura as poder "escrever" uma a uma
+  Array.prototype.forEach.call(nomeEl.querySelectorAll('.pal'), function (pal) {
+    pal.innerHTML = pal.textContent.split('').map(function (c) {
+      return '<span class="ch" aria-hidden="true">' + c + '</span>';
+    }).join('');
+  });
+  cargoEl.setAttribute('aria-label', cargoEl.textContent);
+  cargoEl.innerHTML = cargoEl.textContent.split('').map(function (c) {
+    return c === ' ' ? ' ' : '<span class="ch" aria-hidden="true">' + c + '</span>';
+  }).join('');
 
   const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -463,7 +477,7 @@ if (etiqueta) {
   const GRAVIDADE = 0.7;     // puxa para baixo (maior = mais pesado)
   const ATRITO = 0.992;      // resistência do ar (mais perto de 1 = balança mais tempo)
   const FORCA_RATO = 0.07;   // quanto o rato empurra o crachá ao passar por cima
-  const ALTURA_NAVBAR = 100; // onde a corda fica presa (logo abaixo da navbar)
+  const TOPO_CORDA = -60;    // a fita entra pelo topo do ecrã (fica presa fora da vista)
 
   let largura = 0;
   let compCorda = 0;
@@ -495,23 +509,66 @@ if (etiqueta) {
     return { x: x, y: y, px: x, py: y, im: im };
   }
 
-  // Tamanho do crachá e da corda conforme o ecrã
+  // Faz o texto ocupar a largura pedida (sem passar de um limite de altura)
+  function ajustarTexto(el, larguraAlvo, maxPx) {
+    el.style.fontSize = '100px';
+    const w = el.getBoundingClientRect().width || 1;
+    el.style.fontSize = Math.max(14, Math.min(100 * larguraAlvo / w, maxPx)) + 'px';
+  }
+
+  // Organiza a Home: nome em cima, cargo em baixo e o crachá no espaço do meio
   function medir() {
     largura = home.clientWidth;
     const vh = window.innerHeight;
-    const livre = vh - ALTURA_NAVBAR - 80;
+    const estreito = largura <= 700;
+    const menuFim = menuEl ? (parseFloat(getComputedStyle(menuEl).top) || 0) + menuEl.offsetHeight : 100;
+    const topo = menuFim + (estreito ? 10 : 14);
 
-    let larg = Math.min(340, largura * 0.72, (livre - 100 - 20) / 1.5);
-    larg = Math.max(larg, 190);
+    ajustarTexto(nomeEl, largura * 0.94, vh * (estreito ? 0.2 : 0.22));
+    const nomeFonte = parseFloat(nomeEl.style.fontSize);
+    ajustarTexto(cargoEl, largura * 0.94, nomeFonte * (estreito ? 0.5 : 0.62));
+
+    const nomeH = nomeEl.offsetHeight;
+    const cargoH = cargoEl.offsetHeight;
+    const margemBaixo = Math.max(22, vh * 0.045);
+    const minimo = 150 * 1.5;
+
+    const altura = Math.max(vh, topo + nomeH + minimo + cargoH + margemBaixo + 30);
+    home.style.minHeight = altura + 'px';
+    // se a Home for mais alta que o ecrã, fica presa pelo fundo para se ver tudo
+    home.style.top = Math.min(0, vh - altura) + 'px';
+
+    const cargoY = altura - margemBaixo - cargoH;
+    nomeEl.style.top = topo + 'px';
+    cargoEl.style.top = cargoY + 'px';
+
+    const livreTopo = topo + nomeH + 6;
+    const livre = cargoY - 6 - livreTopo;
+    let larg = Math.min(340, largura * 0.7, livre / 1.5);
+    larg = Math.max(larg, 150);
 
     const altCracha = larg * 1.5;
-    compCorda = Math.max(80, livre - altCracha - 20);
+    const cracTopo = livreTopo + Math.max(0, (livre - altCracha) / 2);
+    compCorda = cracTopo - TOPO_CORDA;
     compBarra = altCracha * 0.8;
 
     cracha.style.setProperty('--cw', larg + 'px');
     corda.style.setProperty('--fita', (larg * 0.105).toFixed(1) + 'px');
     emPx = larg / 20;
-    home.style.minHeight = Math.max(vh, ALTURA_NAVBAR + compCorda + altCracha + 100) + 'px';
+
+    // para a abertura saber onde estão as coisas
+    const hr = home.getBoundingClientRect();
+    function caixa(el) {
+      const r = el.getBoundingClientRect();
+      return { x: r.left - hr.left, y: r.top - hr.top, w: r.width, h: r.height };
+    }
+    home._layout = {
+      W: largura,
+      H: altura,
+      nome: caixa(nomeEl),
+      cargo: caixa(cargoEl),
+      card: { x: largura / 2 - larg / 2, y: cracTopo, w: larg, h: altCracha }
+    };
   }
 
   function construir(comEntrada) {
@@ -520,11 +577,11 @@ if (etiqueta) {
     ligacoes = [];
 
     const ax = largura / 2;
-    const ay = ALTURA_NAVBAR;
+    const ay = TOPO_CORDA;
     const seg = compCorda / SEGMENTOS;
 
     // Na primeira vez o crachá "cai" de lado e balança até assentar
-    const ang = comEntrada && !reduzir ? 0.6 : 0;
+    const ang = comEntrada && !reduzir ? 0.35 : 0;
     const dx = Math.sin(ang);
     const dy = Math.cos(ang);
 
@@ -814,26 +871,371 @@ if (etiqueta) {
     }, 120);
   });
 
-  construir(true);
+  // ---- Quanto o Sobre já cobriu a Home (escurece-a aos poucos) ----
+  let pedidoCobrir = false;
+  function cobrir() {
+    pedidoCobrir = false;
+    const vh = window.innerHeight;
+    const p = Math.max(0, Math.min(1, window.scrollY / Math.max(vh * 0.9, 1)));
+    home.style.setProperty('--cobrir', p.toFixed(3));
+  }
+  window.addEventListener('scroll', function () {
+    if (pedidoCobrir) return;
+    pedidoCobrir = true;
+    requestAnimationFrame(cobrir);
+  }, { passive: true });
+  cobrir();
+
+  // ---- Botão da paleta: troca as cores da Home ----
+  const botaoPaleta = document.getElementById('paleta');
+  const TEMAS = 4;
+  let tema = 0;
+  try { tema = parseInt(localStorage.getItem('homeTema'), 10) || 0; } catch (e) {}
+  if (tema < 0 || tema >= TEMAS) tema = 0;
+  home.dataset.tema = tema;
+  if (botaoPaleta) {
+    botaoPaleta.addEventListener('click', function () {
+      tema = (tema + 1) % TEMAS;
+      home.dataset.tema = tema;
+      try { localStorage.setItem('homeTema', tema); } catch (e) {}
+    });
+  }
+
+  // ---- Arranque: decide se toca a abertura ou se mostra logo tudo ----
+  let jaVista = false;
+  try { jaVista = sessionStorage.getItem('introHome') === '1'; } catch (e) {}
+  const tocarIntro = !reduzir && !jaVista && window.scrollY < 40 && (!location.hash || location.hash === '#home');
+
+  // chamado no fim da abertura (ou logo, se não houver abertura)
+  home._iniciar = function () {
+    if (home._iniciada) return;
+    home._iniciada = true;
+    home.classList.remove('intro-ativa');
+    construir(true);
+    desenhar();
+    acordar();
+  };
+
+  if (tocarIntro) home.classList.add('intro-ativa');
+  medir();
+  construir(false);
   desenhar();
-  acordar();
+  if (!tocarIntro) {
+    home._iniciada = false;
+    home._iniciar();
+  }
+
+  // quando a fonte carrega, as medidas mudam: refaz
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () {
+      if (home._iniciada) {
+        construir(false);
+        desenhar();
+        acordar();
+      } else {
+        medir();
+        construir(false);
+        desenhar();
+      }
+    });
+  }
+
+  // segurança: se a abertura falhar, mostra o crachá na mesma
+  if (tocarIntro) setTimeout(function () { home._iniciar(); }, 14000);
 })();
 
-// ----- Impressora (Sobre): o scroll puxa a folha e imprime o texto -----
+// ----- Abertura da Home: um cursor "desenha" o quadro, escreve o nome e marca a área do crachá -----
 (function () {
-  const secao = document.getElementById('sobre');
-  const palco = secao && secao.querySelector('.sobre-palco');
+  const home = document.getElementById('home');
+  if (!home || !home.classList.contains('intro-ativa')) return;
+
+  const camada = document.getElementById('intro');
+  const quadro = document.getElementById('introFrame');
+  const caixaNome = document.getElementById('introNome');
+  const caixaCargo = document.getElementById('introCargo');
+  const cartao = document.getElementById('introCard');
+  const caret = document.getElementById('introCaret');
+  const cursor = document.getElementById('introCursor');
+  const letrasNome = Array.prototype.slice.call(document.querySelectorAll('#homeNome .ch'));
+  const letrasCargo = Array.prototype.slice.call(document.querySelectorAll('#homeCargo .ch'));
+  if (!camada || !quadro || !caixaNome || !caixaCargo || !cartao || !caret || !cursor) {
+    home._iniciar();
+    return;
+  }
+
+  let acabou = false;
+  const dormir = function (ms) {
+    return new Promise(function (ok) { setTimeout(ok, ms); });
+  };
+
+  function terminar() {
+    if (acabou) return;
+    acabou = true;
+    try { sessionStorage.setItem('introHome', '1'); } catch (e) {}
+    camada.classList.add('fim');
+    cursor.style.opacity = '0';
+    caret.style.opacity = '0';
+    home._iniciar();
+    setTimeout(function () { camada.style.display = 'none'; }, 700);
+    home.removeEventListener('pointerdown', terminar);
+    window.removeEventListener('keydown', terminar);
+  }
+
+  // clicar ou carregar numa tecla salta a abertura
+  home.addEventListener('pointerdown', terminar);
+  window.addEventListener('keydown', terminar);
+
+  function mover(x, y, ms) {
+    cursor.style.transitionDuration = ms + 'ms, 300ms';
+    cursor.style.transform = 'translate(' + x.toFixed(1) + 'px, ' + y.toFixed(1) + 'px)';
+    return dormir(ms);
+  }
+
+  // desenha uma caixa do canto de cima à esquerda até ao de baixo à direita, com o cursor a arrastar
+  function desenhar(caixa, r, ms) {
+    caixa.style.left = r.x + 'px';
+    caixa.style.top = r.y + 'px';
+    caixa.style.transitionDuration = ms + 'ms';
+    return mover(r.x, r.y, 380).then(function () {
+      if (acabou) return;
+      caixa.style.width = r.w + 'px';
+      caixa.style.height = r.h + 'px';
+      return mover(r.x + r.w, r.y + r.h, ms);
+    });
+  }
+
+  function escrever(letras, passo) {
+    const hr = home.getBoundingClientRect();
+    let i = 0;
+    return new Promise(function (ok) {
+      (function seguinte() {
+        if (acabou || i >= letras.length) { ok(); return; }
+        const l = letras[i++];
+        l.classList.add('on');
+        const r = l.getBoundingClientRect();
+        caret.style.opacity = '1';
+        caret.style.left = (r.right - hr.left + 3) + 'px';
+        caret.style.top = (r.top - hr.top + r.height * 0.1) + 'px';
+        caret.style.height = r.height * 0.8 + 'px';
+        setTimeout(seguinte, passo);
+      })();
+    });
+  }
+
+  async function correr() {
+    // espera a fonte para as medidas serem as certas
+    if (document.fonts && document.fonts.ready) {
+      await Promise.race([document.fonts.ready, dormir(1500)]);
+    }
+    if (acabou) return;
+    window.dispatchEvent(new Event('resize'));
+    await dormir(200);
+    if (acabou) return;
+
+    const L = home._layout;
+    if (!L) { terminar(); return; }
+    const pad = L.W <= 700 ? 8 : 24;
+
+    // 1) o quadro "Hero"
+    const q = { x: Math.max(8, L.nome.x - pad), y: L.nome.y - 12, w: 0, h: 0 };
+    q.w = Math.min(L.W - 16, L.nome.w + pad * 2);
+    q.h = L.cargo.y + L.cargo.h + 14 - q.y;
+    q.x = (L.W - q.w) / 2;
+
+    cursor.style.transitionDuration = '0ms, 0ms';
+    cursor.style.transform = 'translate(' + (L.W * 0.12) + 'px, ' + (L.H * 0.3) + 'px)';
+    await dormir(60);
+    cursor.style.opacity = '1';
+    await dormir(350);
+    if (acabou) return;
+    await desenhar(quadro, q, 900);
+    quadro.classList.add('pronto');
+    await dormir(250);
+    if (acabou) return;
+
+    // 2) a caixa do nome e a escrita das letras
+    await desenhar(caixaNome, L.nome, 450);
+    if (acabou) return;
+    mover(L.nome.x + L.nome.w * 0.55, L.nome.y + L.nome.h + 24, 500);
+    await escrever(letrasNome, 70);
+    caret.style.opacity = '0';
+    await dormir(200);
+    if (acabou) return;
+
+    // 3) a área do crachá
+    await desenhar(cartao, L.card, 650);
+    await dormir(300);
+    if (acabou) return;
+
+    // 4) a caixa do cargo e a escrita
+    await desenhar(caixaCargo, L.cargo, 450);
+    if (acabou) return;
+    mover(L.cargo.x + L.cargo.w + 10, L.cargo.y + L.cargo.h + 14, 450);
+    await escrever(letrasCargo, 42);
+    caret.style.opacity = '0';
+    await dormir(350);
+    if (acabou) return;
+
+    // 5) clica fora e o crachá aparece
+    await mover(L.W * 0.9, L.H * 0.12, 500);
+    terminar();
+  }
+
+  correr().catch(terminar);
+})();
+
+// ----- Processo: portal que revela o "universo" quando vens de Habilidades -----
+(function () {
+  const secao = document.getElementById('processo');
+  const universo = document.getElementById('universo');
+  const anel = document.getElementById('anel');
+  if (!secao || !universo || !anel) return;
+
+  const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let pedido = false;
+
+  function suavizar(t) {
+    return t * t * (3 - 2 * t);
+  }
+
+  function atualizar() {
+    pedido = false;
+    const vh = window.innerHeight;
+    const vw = window.innerWidth;
+    const r = secao.getBoundingClientRect();
+
+    // 0 quando o topo da secção entra no ecrã, 1 quando já está quase no topo
+    let p = reduzir ? 1 : (vh - r.top) / (vh * 0.9);
+    p = Math.max(0, Math.min(1, p));
+
+    if (p >= 1) {
+      universo.style.clipPath = 'none';
+      anel.style.opacity = '0';
+      return;
+    }
+
+    const e = suavizar(p);
+    const raioMax = Math.hypot(vw, vh) * 0.62;
+    const raio = e * raioMax;
+    const cy = vh * 0.5 - r.top; // o portal abre no meio do ecrã
+
+    universo.style.clipPath = 'circle(' + raio.toFixed(1) + 'px at 50% ' + cy.toFixed(1) + 'px)';
+    anel.style.setProperty('--cy', cy.toFixed(1) + 'px');
+    anel.style.setProperty('--d', (raio * 2).toFixed(1) + 'px');
+    anel.style.opacity = p > 0.02 ? String(Math.min(1, (1 - p) * 2.2)) : '0';
+  }
+
+  function pedir() {
+    if (pedido) return;
+    pedido = true;
+    requestAnimationFrame(atualizar);
+  }
+
+  window.addEventListener('scroll', pedir, { passive: true });
+  window.addEventListener('resize', pedir);
+  atualizar();
+})();
+
+// ----- Scroll suave: a página desliza com um pequeno atraso, como se fosse empurrada -----
+(function () {
+  const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const rato = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (reduzir || !rato) return; // no telemóvel o scroll nativo já é suave
+
+  // ---- Ajustes que podes mexer ----
+  const SUAVE = 0.1;   // 0.05 = muito lento e "pesado"; 0.2 = quase sem atraso
+  const FORCA = 1;     // multiplica a distância de cada rodada da roda do rato
+
+  const raiz = document.documentElement;
+  let alvo = window.scrollY;
+  let atual = window.scrollY;
+  let correndo = false;
+  let meu = false; // true enquanto é este código a mexer no scroll
+
+  raiz.style.scrollBehavior = 'auto'; // o deslizar passa a ser feito aqui
+
+  function maximo() {
+    return Math.max(0, raiz.scrollHeight - window.innerHeight);
+  }
+
+  function limitar(v) {
+    return Math.max(0, Math.min(maximo(), v));
+  }
+
+  function mover() {
+    atual += (alvo - atual) * SUAVE;
+    if (Math.abs(alvo - atual) < 0.5) atual = alvo;
+    meu = true;
+    window.scrollTo(0, atual);
+    meu = false;
+    if (atual !== alvo) {
+      requestAnimationFrame(mover);
+    } else {
+      correndo = false;
+    }
+  }
+
+  function iniciar() {
+    if (correndo) return;
+    correndo = true;
+    requestAnimationFrame(mover);
+  }
+
+  // Deixa em paz as caixas que têm o seu próprio scroll (galerias, textos longos...)
+  function temScrollProprio(el) {
+    while (el && el !== document.body && el !== raiz) {
+      const s = getComputedStyle(el);
+      if ((s.overflowY === 'auto' || s.overflowY === 'scroll') && el.scrollHeight > el.clientHeight + 1) return true;
+      el = el.parentElement;
+    }
+    return false;
+  }
+
+  window.addEventListener('wheel', function (e) {
+    if (e.ctrlKey || e.defaultPrevented) return;
+    if (document.body.className.match(/aberta|aberto/)) return; // galeria, carta ou lightbox abertos
+    if (temScrollProprio(e.target)) return;
+    e.preventDefault();
+    const k = e.deltaMode === 1 ? 32 : e.deltaMode === 2 ? window.innerHeight : 1;
+    if (!correndo) { alvo = atual = window.scrollY; }
+    alvo = limitar(alvo + e.deltaY * k * FORCA);
+    iniciar();
+  }, { passive: false });
+
+  // Se o scroll mudar por outro motivo (teclado, barra de scroll), acompanha
+  window.addEventListener('scroll', function () {
+    if (meu) return;
+    if (!correndo) { alvo = atual = window.scrollY; }
+  }, { passive: true });
+
+  // Links para âncoras da mesma página: deslizam até lá
+  document.addEventListener('click', function (e) {
+    const a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a || e.defaultPrevented) return;
+    const id = a.getAttribute('href').slice(1);
+    const el = id ? document.getElementById(id) : null;
+    if (!id) { e.preventDefault(); alvo = 0; if (!correndo) atual = window.scrollY; iniciar(); return; }
+    if (!el) return;
+    e.preventDefault();
+    if (!correndo) atual = window.scrollY;
+    alvo = limitar(el.getBoundingClientRect().top + window.scrollY);
+    iniciar();
+  });
+})();
+
+// ----- Impressora (Sobre mim): o scroll puxa a folha e imprime o gif -----
+(function () {
   const cena = document.getElementById('impCena');
   const folha = document.getElementById('impFolha');
   const corpo = document.getElementById('impCorpo');
   const papel = document.getElementById('impPapel');
   const lcd = document.getElementById('impLcd');
-  if (!secao || !palco || !cena || !folha || !corpo || !papel || !lcd) return;
+  if (!cena || !folha || !corpo || !papel || !lcd) return;
+  const alvo = cena.parentElement;
 
   const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // ---- Ajustes que podes mexer ----
-  // (a distância total de scroll está no CSS: "height: calc(100vh + 150vh)" em #sobre)
   const CURSO = 7;            // quanto a folha em branco desce para dentro (em "em")
   const FIM_ENTRADA = 0.14;   // até onde (0 a 1) a folha em branco está a entrar
   const FIM_IMPRESSAO = 0.92; // onde acaba a impressão (o resto é uma pausa antes de soltar)
@@ -851,11 +1253,13 @@ if (etiqueta) {
     return t * t * (3 - 2 * t);
   }
 
-  // 0 quando a secção chega ao topo, 1 quando está prestes a soltar-se
+  // 0 quando a impressora entra no ecrã, 1 quando já está toda à vista
   function progresso() {
-    const total = secao.offsetHeight - palco.offsetHeight;
-    if (total <= 0) return 0;
-    return limitar(-secao.getBoundingClientRect().top / total, 0, 1);
+    const r = alvo.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const fim = Math.max(vh - r.height - 40, 90);
+    const ini = Math.max(vh * 0.85, fim + 180);
+    return limitar((ini - r.top) / (ini - fim), 0, 1);
   }
 
   // A máquina treme e o LED pisca enquanto o scroll está a mexer o papel
@@ -1534,322 +1938,134 @@ if (etiqueta) {
   }
 })();
 
-// ----- Processo: mural de cortiça (papéis presos com alfinetes) -----
+// ----- Processo: o personagem caminha pela trilha enquanto fazes scroll -----
 (function () {
-  const mural = document.querySelector('.processo-lista');
-  if (!mural) return;
-  const lis = Array.prototype.slice.call(mural.querySelectorAll('.passo'));
-  if (!lis.length) return;
+  const trilha = document.getElementById('trilha');
+  const svg = document.getElementById('trilhaSvg');
+  const base = document.getElementById('trilhaBase');
+  const feito = document.getElementById('trilhaFeito');
+  const boneco = document.getElementById('caminhante');
+  if (!trilha || !svg || !base || !feito || !boneco) return;
 
+  const passos = Array.prototype.slice.call(trilha.querySelectorAll('.trilha-passo'));
+  const pontos = passos.map(function (p) { return p.querySelector('.trilha-ponto'); });
   const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const temRato = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   // ---- Ajustes que podes mexer ----
-  const MOLA = 0.012;       // força que traz o papel de volta à posição (maior = mais seco)
-  const ATRITO = 0.025;     // quanto demora a parar de balançar (maior = para mais depressa)
-  const EMPURRAO = 0.022;   // quanto o rato empurra ao passar por cima
-  const INCLINACAO = 1.2;   // quanto o papel inclina ao ser arrastado
-  const ANGULOS = [-3.5, 2.5, -2, 3.5]; // inclinação de cada papel em repouso (graus)
-  const DESV_Y = [0, 18, 6, 22];        // pequenas diferenças de altura
-  const DESV_X = [0, -4, 6, -2];        // pequenas diferenças laterais
+  const LINHA = 0.6;   // altura do ecrã (0 a 1) onde o personagem "fica" enquanto a página corre
+  const SUAVE = 0.14;  // quanto demora a alcançar (maior = mais colado ao scroll)
 
-  // Desenhos à mão (um por papel). No HTML: data-icone="ouvir|explorar|criar|refinar"
-  const ORDEM = ['ouvir', 'explorar', 'criar', 'refinar'];
-  const ICONES = {
-    ouvir: '<path d="M8 12h30a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4H23l-8 7v-7H8a4 4 0 0 1-4-4V16a4 4 0 0 1 4-4z"/><path d="M47 24h9a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4h-3v6l-7-6h-8"/><path d="M12 20h22M12 26h14"/>',
-    explorar: '<circle cx="26" cy="26" r="15"/><path d="M37 37l17 17"/><path d="M18 24c3-6 10-7 13-3"/><path d="M50 12l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/>',
-    criar: '<path d="M10 54l4-14L42 12a5 5 0 0 1 7 0l3 3a5 5 0 0 1 0 7L24 50l-14 4z"/><path d="M36 18l10 10"/><path d="M14 40l10 10"/>',
-    refinar: '<path d="M8 18h48M8 32h48M8 46h48"/><circle cx="22" cy="18" r="5" fill="currentColor" fill-opacity=".15"/><circle cx="42" cy="32" r="5" fill="currentColor" fill-opacity=".15"/><circle cx="28" cy="46" r="5" fill="currentColor" fill-opacity=".15"/>'
-  };
+  let total = 0;       // comprimento da trilha
+  let amostras = [];   // [comprimento, y] para achar o ponto pela altura
+  let ys = [];         // altura de cada passo
+  let atual = 0;       // comprimento onde o personagem está agora
+  let alvo = 0;
+  let correndo = false;
 
-  mural.classList.add('mural-on');
-  if (temRato) mural.classList.add('com-rato');
+  function limitar(v, a, b) { return Math.max(a, Math.min(b, v)); }
 
-  const notas = lis.map(function (el, i) {
-    // deixa de ser um cartão de vidro e passa a ser um papel
-    el.classList.remove('vidro', 'entrada-baixo', 'escondido', 'visivel');
-    el.classList.add('nota', 'n' + (i % 4));
+  // Desenha a trilha: começa no topo, passa por cada ponto e acaba em baixo
+  function desenharTrilha() {
+    const tr = trilha.getBoundingClientRect();
+    const W = tr.width, H = tr.height;
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
 
-    const nomeIcone = el.getAttribute('data-icone') || ORDEM[i % ORDEM.length];
-    if (ICONES[nomeIcone]) {
-      el.insertAdjacentHTML(
-        'afterbegin',
-        '<svg class="nota-desenho" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" ' +
-          'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONES[nomeIcone] + '</svg>'
-      );
+    const pts = [{ x: pontos.length && window.innerWidth > 700 ? W / 2 : 24, y: 0 }];
+    ys = [];
+    pontos.forEach(function (el) {
+      const r = el.getBoundingClientRect();
+      const p = { x: r.left - tr.left + r.width / 2, y: r.top - tr.top + r.height / 2 };
+      pts.push(p);
+      ys.push(p.y);
+    });
+    pts.push({ x: pts[1].x, y: H });
+    pts[pts.length - 1].x = window.innerWidth > 700 ? W / 2 : 24;
+
+    let d = 'M' + pts[0].x.toFixed(1) + ' ' + pts[0].y.toFixed(1);
+    for (let i = 1; i < pts.length; i++) {
+      const a = pts[i - 1], b = pts[i];
+      const dy = (b.y - a.y) * 0.5;
+      d += ' C' + a.x.toFixed(1) + ' ' + (a.y + dy).toFixed(1) + ' ' + b.x.toFixed(1) + ' ' + (b.y - dy).toFixed(1) + ' ' + b.x.toFixed(1) + ' ' + b.y.toFixed(1);
     }
-    el.insertAdjacentHTML('afterbegin', '<span class="alfinete" aria-hidden="true"></span>');
+    base.setAttribute('d', d);
+    feito.setAttribute('d', d);
 
-    return {
-      el: el,
-      pino: el.querySelector('.alfinete'),
-      i: i,
-      x: 0, y: 0,        // posição (canto do papel)
-      yo: 0, vy: 0,      // desvio vertical (queda ao entrar / pousar)
-      ang: 0, w: 0,      // ângulo e velocidade angular
-      ang0: ANGULOS[i % ANGULOS.length],
-      alvo: 0, dxs: 0,
-      arrastando: false,
-      z: i + 1
-    };
-  });
-
-  let L = 0;
-  let A = 0;
-  let largNota = 0;
-  let altNota = 0;
-  let zTopo = notas.length + 1;
-  let arrasto = null;
-  let ultimoPonteiro = null;
-  let visivel = false;
-  let entrou = false;
-  let rodando = false;
-  let ultimo = 0;
-
-  function limitar(v, min, max) {
-    return Math.max(min, Math.min(max, v));
+    total = base.getTotalLength();
+    amostras = [];
+    const n = 240;
+    for (let i = 0; i <= n; i++) {
+      const L = total * i / n;
+      amostras.push([L, base.getPointAtLength(L).y]);
+    }
+    feito.style.strokeDasharray = total;
   }
 
-  // ---------- disposição ----------
-  function disposicao() {
-    L = mural.clientWidth;
-    const pad = 18;
-    const gap = 22;
-    const colunas = L >= 980 ? 4 : (L >= 520 ? 2 : 1);
+  // Comprimento da trilha na altura y (a trilha só desce, por isso dá para pesquisar)
+  function comprimentoEm(y) {
+    if (y <= amostras[0][1]) return 0;
+    if (y >= amostras[amostras.length - 1][1]) return total;
+    let lo = 0, hi = amostras.length - 1;
+    while (hi - lo > 1) {
+      const m = (lo + hi) >> 1;
+      if (amostras[m][1] < y) lo = m; else hi = m;
+    }
+    const a = amostras[lo], b = amostras[hi];
+    const t = (y - a[1]) / ((b[1] - a[1]) || 1);
+    return a[0] + (b[0] - a[0]) * t;
+  }
 
-    if (colunas === 4) largNota = Math.min(252, (L - 2 * pad - 3 * gap) / 4);
-    else if (colunas === 2) largNota = Math.min(260, (L - 2 * pad - gap) / 2);
-    else largNota = Math.min(L - 2 * pad - 28, 320);
+  function atualizarAlvo() {
+    const tr = trilha.getBoundingClientRect();
+    alvo = comprimentoEm(window.innerHeight * LINHA - tr.top);
+  }
 
-    notas.forEach(function (n) { n.el.style.width = largNota + 'px'; });
-    altNota = 0;
-    notas.forEach(function (n) { altNota = Math.max(altNota, n.el.offsetHeight); });
+  function pintar() {
+    const p = base.getPointAtLength(atual);
+    const q = base.getPointAtLength(Math.min(total, atual + 3));
+    const inclina = limitar(Math.atan2(q.x - p.x, q.y - p.y) * -18, -8, 8);
+    const w = boneco.offsetWidth;
+    const h = boneco.offsetHeight;
+    boneco.style.transform =
+      'translate(' + (p.x - w / 2).toFixed(1) + 'px, ' + (p.y - h * 0.88).toFixed(1) + 'px) rotate(' + inclina.toFixed(1) + 'deg)';
+    feito.style.strokeDashoffset = (total - atual).toFixed(1);
 
-    const linhas = Math.ceil(notas.length / colunas);
-    const alturaLinha = altNota + gap + 18;
-    A = 2 * pad + linhas * alturaLinha;
-    mural.style.height = A + 28 + 'px'; // + moldura de 14px de cada lado
-
-    notas.forEach(function (n, k) {
-      const col = k % colunas;
-      const lin = Math.floor(k / colunas);
-      let x;
-      if (colunas === 1) {
-        x = pad + (k % 2 ? (L - 2 * pad - largNota) : 0) * 0.7;
-      } else {
-        x = pad + col * ((L - 2 * pad - largNota) / (colunas - 1));
-      }
-      n.x = limitar(x + DESV_X[k % DESV_X.length], 6, L - largNota - 6);
-      n.y = pad + lin * alturaLinha + DESV_Y[k % DESV_Y.length];
-      n.el.style.zIndex = n.z;
-      desenhar(n);
+    const yAtual = p.y;
+    passos.forEach(function (li, i) {
+      li.classList.toggle('ativo', yAtual >= ys[i] - 6);
     });
   }
 
-  function desenhar(n) {
-    n.el.style.transform =
-      'translate(' + n.x.toFixed(1) + 'px, ' + (n.y + n.yo).toFixed(1) + 'px) rotate(' + n.ang.toFixed(2) + 'deg)';
-  }
-
-  // ---------- física: cada papel é um pêndulo preso pelo alfinete ----------
-  function ativo(n) {
-    return n.arrastando || Math.abs(n.w) > 0.01 || Math.abs(n.ang - n.ang0) > 0.05 ||
-      Math.abs(n.yo) > 0.1 || Math.abs(n.vy) > 0.05;
-  }
-
-  function quadro(t) {
-    if (!rodando) return;
-    if (!visivel) {
-      rodando = false;
-      return;
-    }
-    if (!ultimo) ultimo = t;
-    const s = Math.min((t - ultimo) / 16.667, 3);
-    ultimo = t;
-
-    let algum = false;
-    notas.forEach(function (n) {
-      if (n.arrastando) {
-        n.dxs *= Math.pow(0.9, s);
-        n.alvo = reduzir ? n.ang0 : n.ang0 + limitar(n.dxs * INCLINACAO, -28, 28);
-      } else {
-        n.alvo = n.ang0;
-      }
-
-      n.w += (-MOLA * (n.ang - n.alvo) - ATRITO * n.w) * s;
-      n.w = limitar(n.w, -8, 8);
-      n.ang += n.w * s;
-
-      n.vy += (-0.02 * n.yo - 0.11 * n.vy) * s;
-      n.yo += n.vy * s;
-
-      desenhar(n);
-      if (ativo(n)) algum = true;
-    });
-
-    if (algum) {
-      requestAnimationFrame(quadro);
+  function loop() {
+    atual += (alvo - atual) * (reduzir ? 1 : SUAVE);
+    if (Math.abs(alvo - atual) < 0.4) atual = alvo;
+    pintar();
+    if (atual !== alvo) {
+      requestAnimationFrame(loop);
     } else {
-      rodando = false;
+      correndo = false;
     }
   }
 
   function acordar() {
-    if (rodando || !visivel) return;
-    rodando = true;
-    ultimo = 0;
-    requestAnimationFrame(quadro);
+    atualizarAlvo();
+    if (correndo) return;
+    correndo = true;
+    requestAnimationFrame(loop);
   }
 
-  // ---------- entrada: os papéis caem e são presos ----------
-  function entrar() {
-    if (entrou) return;
-    entrou = true;
-    notas.forEach(function (n, k) {
-      n.ang = n.ang0;
-      n.yo = 0;
-      if (reduzir) {
-        n.el.classList.add('entrou');
-        desenhar(n);
-        return;
-      }
-      setTimeout(function () {
-        n.ang = n.ang0 + (Math.random() < 0.5 ? -1 : 1) * (14 + Math.random() * 12);
-        n.yo = -(110 + Math.random() * 50);
-        n.vy = 0;
-        n.w = 0;
-        n.el.classList.add('entrou');
-        n.pino.classList.add('plop');
-        acordar();
-      }, k * 150);
-    });
+  function tudo() {
+    desenharTrilha();
+    atualizarAlvo();
+    atual = alvo;
+    pintar();
   }
 
-  // ---------- rato: passar por cima balança; arrastar muda o papel de sítio ----------
-  function posicao(e) {
-    const r = mural.getBoundingClientRect();
-    return { x: e.clientX - r.left - mural.clientLeft, y: e.clientY - r.top - mural.clientTop };
-  }
-
-  mural.addEventListener('pointerdown', function (e) {
-    if (e.pointerType !== 'mouse' || e.button !== 0) return;
-    const el = e.target.closest('.nota');
-    if (!el) return;
-    const n = notas.filter(function (q) { return q.el === el; })[0];
-    if (!n) return;
-
-    const p = posicao(e);
-    n.arrastando = true;
-    n.z = ++zTopo;
-    el.style.zIndex = n.z;
-    el.classList.add('levantada');
-    n.dxs = 0;
-    arrasto = { n: n, offX: p.x - n.x, offY: p.y - n.y, ultX: p.x };
-    el.setPointerCapture(e.pointerId);
-    acordar();
-  });
-
-  mural.addEventListener('pointermove', function (e) {
-    if (e.pointerType !== 'mouse') return;
-    const p = posicao(e);
-
-    if (arrasto) {
-      const n = arrasto.n;
-      n.x = limitar(p.x - arrasto.offX, 4, L - largNota - 4);
-      n.y = limitar(p.y - arrasto.offY, 4, A - altNota - 4);
-      n.dxs = n.dxs * 0.6 + (p.x - arrasto.ultX) * 0.4;
-      arrasto.ultX = p.x;
-      acordar();
-      return;
-    }
-
-    // passar por cima: empurra o papel com a velocidade do rato
-    const agora = performance.now();
-    const el = e.target.closest('.nota');
-    if (el && ultimoPonteiro && !reduzir) {
-      const n = notas.filter(function (q) { return q.el === el; })[0];
-      const dt = Math.max(agora - ultimoPonteiro.t, 8);
-      const vx = limitar((p.x - ultimoPonteiro.x) / dt * 16, -40, 40);
-      const alavanca = limitar((p.y - (n.y + 15)) / altNota, 0.15, 1);
-      n.w = limitar(n.w - vx * EMPURRAO * alavanca, -6, 6);
-      acordar();
-    }
-    ultimoPonteiro = { x: p.x, y: p.y, t: agora };
-  });
-
-  function soltar() {
-    if (!arrasto) return;
-    const n = arrasto.n;
-    n.arrastando = false;
-    n.el.classList.remove('levantada');
-    n.pino.classList.remove('plop');
-    void n.pino.offsetWidth;
-    n.pino.classList.add('plop');
-    if (!reduzir) {
-      n.yo = -8; // pousa com um pequeno peso
-      n.vy = 0;
-    }
-    arrasto = null;
-    acordar();
-  }
-
-  mural.addEventListener('pointerup', soltar);
-  mural.addEventListener('pointercancel', soltar);
-  mural.addEventListener('pointerleave', function () { ultimoPonteiro = null; });
-
-  // Toque: tocar num papel faz-o balançar (o scroll da página continua livre)
-  mural.addEventListener('click', function (e) {
-    if (e.pointerType === 'mouse' || reduzir) return;
-    const el = e.target.closest('.nota');
-    if (!el) return;
-    const n = notas.filter(function (q) { return q.el === el; })[0];
-    n.w += (Math.random() < 0.5 ? -1 : 1) * 4.5;
-    acordar();
-  });
-
-  // ---------- arranque ----------
-  mural.insertAdjacentHTML(
-    'afterend',
-    '<p class="mural-dica">' + (temRato ? 'Arrasta os papéis do mural' : 'Toca nos papéis') + '</p>'
-  );
-
-  let larguraAnterior = 0;
-  function preparar() {
-    disposicao();
-    larguraAnterior = mural.clientWidth;
-  }
-
-  let temporizador = null;
-  window.addEventListener('resize', function () {
-    clearTimeout(temporizador);
-    temporizador = setTimeout(function () {
-      if (Math.abs(mural.clientWidth - larguraAnterior) < 2) return;
-      preparar();
-      acordar();
-    }, 200);
-  });
-
-  const iniciar = function () {
-    preparar();
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (entradas) {
-        const e = entradas[0];
-        visivel = e.isIntersecting;
-        if (e.intersectionRatio >= 0.25) entrar();
-        if (visivel) acordar();
-      }, { threshold: [0, 0.25] }).observe(mural);
-    } else {
-      visivel = true;
-      entrar();
-    }
-  };
-
-  // as fontes mudam a altura dos papéis: espera por elas antes de medir
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(iniciar);
-  } else {
-    iniciar();
-  }
+  window.addEventListener('scroll', acordar, { passive: true });
+  window.addEventListener('resize', function () { tudo(); });
+  window.addEventListener('load', tudo);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(tudo);
+  if (boneco.complete === false) boneco.addEventListener('load', tudo);
+  tudo();
 })();
 
 // ----- Correio: gira a manivela, sai uma carta, voa e abre no centro do ecrã -----

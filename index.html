@@ -7,7 +7,7 @@
   <meta name="description" content="Portfólio de Sergio Andrade, designer multimédia.">
   <link rel="icon" href="Assets/imgs/minha.logo.png">
 
-  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Lilita+One&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="Assets/css/styles.css">
 
   
@@ -38,9 +38,15 @@
 
 
   <!-- HOME -->
+  <!-- Home e Sobre: a Home fica fixa e o Sobre sobe por cima, "empurrando-a" -->
+  <div class="duas-telas">
   <section id="home">
-    <!-- PAREDE com luz de cima; o crachá está pendurado numa fita e projeta sombra -->
+    <!-- Fundo liso escuro com pontinhos (como uma tela de design) -->
     <div class="parede" aria-hidden="true"></div>
+
+    <!-- Nome e cargo gigantes; a fita do crachá passa por cima do nome -->
+    <h1 class="home-nome" id="homeNome" aria-label="Sergio Andrade"><span class="pal">Sergio</span> <span class="pal">Andrade</span></h1>
+    <p class="home-cargo" id="homeCargo">Designer Multimédia</p>
 
     <div class="cracha-palco" id="crachaPalco">
       <svg class="corda" id="corda" aria-hidden="true">
@@ -58,8 +64,8 @@
         <path id="fitaGuia" data-fita fill="none" stroke="none"/>
         <text class="fita-texto"><textPath href="#fitaGuia" startOffset="6%">SERGIO ANDRADE · DESIGNER MULTIMÉDIA · SERGIO ANDRADE · DESIGNER MULTIMÉDIA · SERGIO ANDRADE ·</textPath></text>
         <!-- prego na parede onde a fita está presa -->
-        <circle id="cordaAncora" r="11" fill="url(#metalAncora)"/>
-        <circle id="cordaAncora2" r="4" fill="#3b4568"/>
+        <circle id="cordaAncora" r="0" fill="url(#metalAncora)"/>
+        <circle id="cordaAncora2" r="0" fill="#3b4568"/>
       </svg>
 
       <div class="cracha" id="cracha">
@@ -71,13 +77,13 @@
           <div class="cara cara-frente">
             <div class="cracha-banda">
               <span class="cracha-furo"></span>
-              <p class="cracha-topo"></p>
+              <p class="cracha-topo">Portfólio</p>
             </div>
             <div class="cracha-corpo">
               <div class="cracha-foto">
                 <img src="Assets/imgs/minha foto perfil.png" alt="Foto de Sergio Andrade" draggable="false">
               </div>
-              <h1 class="cracha-nome">Sergio Andrade</h1>
+              <p class="cracha-nome">Sergio Andrade</p>
               <p class="cracha-funcao">Designer multimédia</p>
               <div class="cracha-fim">
                 <div class="cracha-barras"></div>
@@ -90,13 +96,13 @@
           <div class="cara cara-verso">
             <div class="cracha-banda cracha-banda-laranja">
               <span class="cracha-furo"></span>
-              <p class="cracha-topo">Contatos</p>
+              <p class="cracha-topo">Contactos</p>
             </div>
             <div class="cracha-corpo">
               <h2 class="cracha-titulo">Vamos conversar?</h2>
               <p class="cracha-lema">Experimentar, testar e evoluir.</p>
               <ul class="cracha-lista">
-                <li><small>Email</small><a href="Sergioa.sf@icloud.com">Sergioa.sf@icloud.com</a></li>
+                <li><small>Email</small><a href="mailto:o-teu-email@exemplo.com">o-teu-email@exemplo.com</a></li>
                 <li><small>Behance</small><a href="https://www.behance.net/sergioasf" target="_blank" rel="noopener">behance.net/sergioasf</a></li>
                 <li><small>Instagram</small><a href="https://www.instagram.com/bysergio.a/" target="_blank" rel="noopener">@bysergio.a</a></li>
                 <li><small>LinkedIn</small><a href="https://www.linkedin.com/in/sergioasf/" target="_blank" rel="noopener">in/sergioasf</a></li>
@@ -114,26 +120,59 @@
       </div>
     </div>
 
-    <!-- Seta que leva ao Sobre -->
-    <a href="#sobre" class="seta-baixo" aria-label="Ver sobre mim">
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M6 9l6 6 6-6"/>
+    <!-- ABERTURA: um cursor "desenha" o quadro, escreve o nome e marca a área do crachá -->
+    <div class="intro" id="intro" aria-hidden="true">
+      <div class="intro-frame" id="introFrame">
+        <span class="intro-etiqueta">Hero</span>
+        <i class="al tl"></i><i class="al tr"></i><i class="al bl"></i><i class="al br"></i>
+      </div>
+      <div class="intro-caixa" id="introNome"></div>
+      <div class="intro-caixa" id="introCargo"></div>
+      <div class="intro-card" id="introCard">
+        <svg viewBox="0 0 100 150" preserveAspectRatio="none"><path d="M0 0L100 150M100 0L0 150" vector-effect="non-scaling-stroke"/></svg>
+        <span>ID card</span>
+      </div>
+      <div class="intro-caret" id="introCaret"></div>
+      <div class="intro-cursor" id="introCursor">
+        <svg viewBox="0 0 24 24" width="26" height="26"><path d="M3 2v18l5-4.6 3.6 7.8 3-1.4-3.6-7.6H18z" fill="#fff" stroke="#14266b" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        <span>Sergio</span>
+      </div>
+    </div>
+
+    <!-- Botão para mudar as cores da Home -->
+    <button class="paleta" id="paleta" type="button" aria-label="Mudar as cores da Home" title="Mudar as cores">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+        <path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-.9 2-1.8 0-.5-.2-.9-.5-1.3-.3-.4-.5-.7-.5-1.2 0-.9.7-1.7 1.8-1.7H17a4 4 0 0 0 4-4C21 6.5 17 3 12 3zM7.5 12a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8zm3-4a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8zm5 0a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8z"/>
       </svg>
-    </a>
+    </button>
   </section>
 
   <!-- SOBRE -->
   <section id="sobre">
-    <!-- Palco fixo: a página pára aqui e o scroll controla a impressão -->
-    <div class="sobre-palco">
-    <div class="sobre-layout">
-      <!-- Lado esquerdo: o teu gif com sombra no chão -->
-      <div class="sobre-personagem entrada-esquerda">
-        <img class="sobre-gif" src="Assets/imgs/meu.gif.gif" alt="Animação do meu personagem">
-      </div>
+    <h2 class="sobre-titulo entrada-baixo">Sobre mim</h2>
 
-      <!-- Lado direito: impressora. O scroll puxa a folha e imprime o texto -->
-      <div class="impressora entrada-direita">
+    <div class="sobre-grade">
+      <figure class="sobre-foto entrada-esquerda">
+        <img src="Assets/imgs/minha foto perfil.png" alt="Foto de Sergio Andrade" loading="lazy">
+      </figure>
+
+      <div class="sobre-texto entrada-direita">
+        <h3 class="sobre-frase">Designer multimédia.<br>Sempre a experimentar.</h3>
+        <p>Olá, sou o Sergio <span class="sobre-estrela">✦</span></p>
+        <p>O design, para mim, é uma forma de transformar ideias em experiências visuais. É explorar, experimentar e encontrar novas maneiras de comunicar aquilo que nem sempre precisa de ser dito com palavras.</p>
+        <p class="sobre-destaque">Experimentar, testar e evoluir.</p>
+
+        <div class="sobre-botoes">
+          <a class="botao-escuro" href="projetos.html">Ver projetos <span aria-hidden="true">↗</span></a>
+          <a class="icone-social" href="https://www.behance.net/sergioasf" target="_blank" rel="noopener" aria-label="Behance">Bē</a>
+          <a class="icone-social" href="https://www.instagram.com/bysergio.a/" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.8" fill="currentColor"/></svg>
+          </a>
+          <a class="icone-social" href="https://www.linkedin.com/in/sergioasf/" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+        </div>
+
+        <!-- A impressora imprime o teu gif conforme fazes scroll -->
+        <div class="impressora">
         <div class="imp-cena" id="impCena">
 
           <!-- Folha em branco (sai por trás da impressora) -->
@@ -152,23 +191,21 @@
             <span class="imp-fenda"></span>
           </div>
 
-          <!-- Folha impressa (sai pela fenda da frente) -->
+          <!-- Folha impressa (sai pela fenda da frente): o teu gif e o convite -->
           <div class="imp-saida" id="impSaida">
             <div class="imp-papel" id="impPapel">
-              <p class="rotulo">Sobre mim</p>
-              <h2>Olá, sou o Sergio</h2>
-              <p>O design, para mim, é uma forma de transformar ideias em experiências visuais. É explorar, experimentar e encontrar novas maneiras de comunicar aquilo que nem sempre precisa de ser dito com palavras.</p>
-              <p>Mais do que seguir uma fórmula, acredito no processo de experimentar, testar e evoluir. Cada projeto é uma oportunidade de aprender algo novo.</p>
-              <p class="imp-assinatura">Sergio</p>
+              <img class="imp-gif" src="Assets/imgs/meu.gif.gif" alt="Animação do meu personagem">
+              <a class="imp-convite" href="#conversa">Vamos criar juntos?</a>
             </div>
           </div>
         </div>
+        </div>
       </div>
     </div>
-    </div>
   </section>
+  </div>
 
-  <!-- O QUE FAÇO 
+  <!-- O QUE FAÇO
   <section id="servicos" class="sobre-extra">
     <div class="titulo-secao entrada-baixo">
       <p class="rotulo">O que faço</p>
@@ -204,12 +241,10 @@
 
   <!-- HABILIDADES -->
   <section id="habilidades" class="sobre-extra">
-    <div class="titulo-secao entrada-baixo">
-      <p class="rotulo">Habilidades</p>
-    </div>
+    <h2 class="sobre-titulo claro entrada-baixo">Habilidades</h2>
 
     <div class="caixa-tags-ext entrada-baixo">
-      <div class="caixa-tags vidro" id="caixaTags">
+      <div class="caixa-tags vidro fliperama" id="caixaTags">
         <!--
           COMO ADICIONAR UMA HABILIDADE:
           copia uma linha <li> abaixo e muda só o texto. Cada <li> vira uma peça do Tetris.
@@ -241,39 +276,61 @@
 
         
 
-  <!-- PROCESSO -->
-  <section id="processo" class="sobre-extra">
-    <div class="titulo-secao entrada-baixo">
-      <p class="rotulo">Processo</p>
-    </div>
+  <!-- PROCESSO: o teu personagem caminha pela trilha enquanto fazes scroll -->
+  <section id="processo" class="processo-secao">
+    <!-- O "universo": fundo escuro com pontinhos e estrelas, revelado como um portal ao fazer scroll -->
+    <div class="processo-universo" id="universo" aria-hidden="true"></div>
+    <div class="processo-anel" id="anel" aria-hidden="true"></div>
 
-    <!--
-      MURAL DO PROCESSO: cada <li> vira um papel preso na cortiça.
-      Para adicionar um passo, copia um <li> e muda o texto.
-      data-icone escolhe o desenho à mão: ouvir, explorar, criar ou refinar.
-    -->
-    <ol class="processo-lista">
-      <li class="passo vidro entrada-baixo" data-icone="ouvir">
-        <span class="passo-numero">1</span>
-        <h3>Ouvir</h3>
-        <p>Entender a marca, o público e o objetivo antes de desenhar qualquer coisa.</p>
-      </li>
-      <li class="passo vidro entrada-baixo" data-icone="explorar">
-        <span class="passo-numero">2</span>
-        <h3>Explorar</h3>
-        <p>Referências, croquis soltos e muitas ideias em cima da mesa.</p>
-      </li>
-      <li class="passo vidro entrada-baixo" data-icone="criar">
-        <span class="passo-numero">3</span>
-        <h3>Criar</h3>
-        <p>Dar forma ao conceito escolhido, com cor, tipografia e composição.</p>
-      </li>
-      <li class="passo vidro entrada-baixo" data-icone="refinar">
-        <span class="passo-numero">4</span>
-        <h3>Refinar</h3>
-        <p>Testar, ajustar os detalhes e entregar tudo pronto a usar.</p>
-      </li>
-    </ol>
+    <h2 class="sobre-titulo entrada-baixo">Processo</h2>
+
+    <div class="trilha" id="trilha">
+      <svg class="trilha-svg" id="trilhaSvg" aria-hidden="true">
+        <path class="trilha-base" id="trilhaBase"/>
+        <path class="trilha-feito" id="trilhaFeito"/>
+      </svg>
+      <img class="caminhante" id="caminhante" src="Assets/imgs/Rostro_3D_1-removebg-preview.png" alt="" aria-hidden="true">
+
+      <!-- Para mudar um passo, edita o texto do <li> -->
+      <ol class="trilha-passos">
+        <li class="trilha-passo">
+          <span class="trilha-ponto" aria-hidden="true">1</span>
+          <div class="trilha-cartao">
+            <svg class="trilha-icone" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12h30a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4H23l-8 7v-7H8a4 4 0 0 1-4-4V16a4 4 0 0 1 4-4z"/><path d="M47 24h9a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4h-3v6l-7-6h-8"/><path d="M12 20h22M12 26h14"/></svg>
+            <span class="trilha-num">01<small>/04</small></span>
+            <h3>Ouvir</h3>
+            <p>Entender a marca, o público e o objetivo antes de desenhar qualquer coisa.</p>
+          </div>
+        </li>
+        <li class="trilha-passo">
+          <span class="trilha-ponto" aria-hidden="true">2</span>
+          <div class="trilha-cartao">
+            <svg class="trilha-icone" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="26" cy="26" r="15"/><path d="M37 37l17 17"/><path d="M18 24c3-6 10-7 13-3"/><path d="M50 12l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>
+            <span class="trilha-num">02<small>/04</small></span>
+            <h3>Explorar</h3>
+            <p>Referências, croquis soltos e muitas ideias em cima da mesa.</p>
+          </div>
+        </li>
+        <li class="trilha-passo">
+          <span class="trilha-ponto" aria-hidden="true">3</span>
+          <div class="trilha-cartao">
+            <svg class="trilha-icone" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 54l4-14L42 12a5 5 0 0 1 7 0l3 3a5 5 0 0 1 0 7L24 50l-14 4z"/><path d="M36 18l10 10"/><path d="M14 40l10 10"/></svg>
+            <span class="trilha-num">03<small>/04</small></span>
+            <h3>Criar</h3>
+            <p>Dar forma ao conceito escolhido, com cor, tipografia e composição.</p>
+          </div>
+        </li>
+        <li class="trilha-passo">
+          <span class="trilha-ponto" aria-hidden="true">4</span>
+          <div class="trilha-cartao">
+            <svg class="trilha-icone" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 18h48M8 32h48M8 46h48"/><circle cx="22" cy="18" r="5" fill="currentColor" fill-opacity=".15"/><circle cx="42" cy="32" r="5" fill="currentColor" fill-opacity=".15"/><circle cx="28" cy="46" r="5" fill="currentColor" fill-opacity=".15"/></svg>
+            <span class="trilha-num">04<small>/04</small></span>
+            <h3>Refinar</h3>
+            <p>Testar, ajustar os detalhes e entregar tudo pronto a usar.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
   </section>
 
   <!-- BOTÃO SECUNDÁRIO: VER PROJETOS (Fora dos blocos) -->
@@ -288,12 +345,12 @@
       <!-- Contacto direto: fica sempre visível, sem precisar de girar nada -->
       <div class="correio-texto">
         <h2>Vamos criar algo juntos?</h2>
-        <p>Tem um projeto em mente? Conta a sua ideia e vemos como desenvolver ela!</p>
+        <p>Tens um projeto em mente? Conta-me a ideia e vemos como a pôr de pé.</p>
         <div class="cta-botoes">
           <a class="botao" href="mailto:o-teu-email@exemplo.com">Enviar email</a>
           <a class="botao botao-vidro" href="https://www.behance.net/sergioasf" target="_blank" rel="noopener">Ver Behance</a>
         </div>
-        <p class="correio-dica" id="correioDica">Gire a manivela do correio &#8635;</p>
+        <p class="correio-dica" id="correioDica">Ou gira a manivela do correio &#8635;</p>
       </div>
 
       <!-- Caixa de correio com manivela -->
@@ -391,11 +448,11 @@
           <article class="carta-conteudo">
             <p class="rotulo">Carta 1 &middot; Contactos</p>
             <h2>Vamos criar algo juntos?</h2>
-            <p>Me conta a sua ideia. Respondo assim que possível.</p>
+            <p>Conta-me a tua ideia. Respondo o mais depressa que puder.</p>
             <ul class="carta-contactos">
               <li>
                 <small>Email</small>
-                <a href="mailto:o-teu-email@exemplo.com">Sergioa.sf@icloud.com</a>
+                <a href="mailto:o-teu-email@exemplo.com">o-teu-email@exemplo.com</a>
                 <button type="button" class="carta-copiar" data-copiar="o-teu-email@exemplo.com">Copiar</button>
               </li>
               <li><small>Behance</small><a href="https://www.behance.net/sergioasf" target="_blank" rel="noopener">behance.net/sergioasf</a></li>
@@ -408,7 +465,7 @@
           <!-- Carta 2: projetos -->
           <article class="carta-conteudo" hidden>
             <p class="rotulo">Carta 2 &middot; Projetos</p>
-            <h2>Quer ver o que já fiz?</h2>
+            <h2>Queres ver o que já fiz?</h2>
             <p>Identidades, ilustrações, cartazes e mais. Passa pela galeria de projetos e vê como cada ideia ganhou forma.</p>
             <a class="botao carta-botao" href="projetos.html">Ver projetos</a>
             <p class="carta-assinatura">Sergio</p>
