@@ -4593,10 +4593,17 @@ button,
   /* no celular a pilha continua: pasta mais compacta e abas só com o número */
   .pagina-projetos .projeto {
     top: 8.8rem;
-    height: min(calc(100svh - 10.8rem), 640px);
+    height: auto;
+    grid-template-rows: auto auto;
     margin-bottom: 12vh;
-    padding: 1.3rem 1.2rem 1.5rem;
-    gap: 1rem;
+    padding: 1.1rem 0.9rem 1.2rem;
+    gap: 0.9rem;
+  }
+
+  /* pasta mais larga: menos margem nas laterais da página */
+  .pagina-projetos #projetos {
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
   }
 
   .pagina-projetos .projeto::before { border-radius: 26px; }
@@ -4613,11 +4620,15 @@ button,
 
   .pagina-projetos .pasta-frente { gap: 0.8rem; }
 
-  .pagina-projetos .projeto h3 { font-size: 2rem; }
+  .pagina-projetos .projeto h3 {
+    font-size: 1.9rem;
+    white-space: nowrap; /* uma linha só: todas as pastas com a mesma altura */
+  }
 
   .pagina-projetos .projeto .capa {
     width: 100%;
-    height: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3.1;
     border-radius: 18px;
     padding: 7px;
   }
@@ -4684,4 +4695,11 @@ html.paginas-toque {
     min-height: 100svh;
     justify-content: center;
   }
+}
+
+
+/* Manivela do correio: o dedo gira a manivela e a página não se mexe
+   (antes uma regra mais abaixo devolvia o scroll ao toque e a tela balançava) */
+.manivela-alvo {
+  touch-action: none !important;
 }

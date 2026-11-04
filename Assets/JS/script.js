@@ -1220,9 +1220,11 @@ if (etiqueta) {
       const cartoes = Array.prototype.slice.call(lp.querySelectorAll('.projeto:not(.fora)'));
       if (!cartoes.length || getComputedStyle(cartoes[0]).position !== 'sticky') return lista;
       const topoLista = lp.getBoundingClientRect().top + y;
-      const passo = cartoes[0].offsetHeight + parseFloat(getComputedStyle(cartoes[0]).marginBottom);
-      const paradas = cartoes.map(function (c, k) {
-        return Math.max(0, topoLista + k * passo - parseFloat(getComputedStyle(c).top));
+      let soma = 0;
+      const paradas = cartoes.map(function (c) {
+        const p = Math.max(0, topoLista + soma - parseFloat(getComputedStyle(c).top));
+        soma += c.offsetHeight + parseFloat(getComputedStyle(c).marginBottom);
+        return p;
       });
       lista.push({ S: 0, E: paradas[0] });
       for (let k = 1; k < paradas.length; k++) lista.push({ S: paradas[k], E: paradas[k] });
@@ -2363,7 +2365,7 @@ if (etiqueta) {
 
   const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const temRato = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if (dica && !temRato) dica.innerHTML = 'Ou gira a manivela com o dedo &#8635;';
+  if (dica && !temRato) dica.innerHTML = 'Toque na manivela (ou gire com o dedo) &#8635;';
 
   // ---- Ajustes que podes mexer ----
   const TEMPO_VOLTA = 1100;   // duração de uma volta completa ao clicar/tocar (ms)
