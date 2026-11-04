@@ -2365,7 +2365,7 @@ if (etiqueta) {
 
   const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const temRato = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if (dica && !temRato) dica.innerHTML = 'Toque na manivela (ou gire com o dedo) &#8635;';
+  if (dica && !temRato) dica.innerHTML = 'Gire a manivela &#8635;';
 
   // ---- Ajustes que podes mexer ----
   const TEMPO_VOLTA = 1100;   // duração de uma volta completa ao clicar/tocar (ms)
