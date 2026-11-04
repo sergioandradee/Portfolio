@@ -1193,11 +1193,12 @@ if (etiqueta) {
   }
 
   // ---- Páginas: entre uma secção e outra o scroll "pesa" e depois dá um pulo suave ----
-  const RESISTENCIA = 220; // quanto é preciso empurrar (em px de scroll) para passar de página; 0 = sem resistência
-  const CEDER = 0.1;       // quanto a página cede enquanto empurras (0.1 = 10% do empurrão)
-  const CEDER_MAX = 28;    // o máximo que ela cede, em px (é o "elástico")
-  const DURACAO = 850;     // duração do pulo para a página seguinte, em milissegundos
-  const DESCANSO = 450;    // pausa depois do pulo (evita passar duas páginas de uma vez)
+  const RESISTENCIA = 100; // quanto é preciso empurrar (em px de scroll) para passar de página; 0 = sem resistência
+  const RESISTENCIA_VOLTAR = 60; // o mesmo, mas para voltar à página anterior (mais leve)
+  const CEDER = 0.08;      // quanto a página cede enquanto empurras (0.1 = 10% do empurrão)
+  const CEDER_MAX = 9;     // o máximo que ela cede, em px (é o "elástico")
+  const DURACAO = 600;     // duração do pulo para a página seguinte, em milissegundos
+  const DESCANSO = 300;    // pausa depois do pulo (evita passar duas páginas de uma vez)
 
   let gate = null;         // empurrão em curso contra o fim/início de uma página
   let timerGate = 0;
@@ -1210,6 +1211,24 @@ if (etiqueta) {
     const y = window.scrollY;
     const vh = window.innerHeight;
     const lista = [];
+
+    // Página Projetos: cada cartão da pilha é uma "página"
+    const lp = document.getElementById('listaProjetos');
+    if (lp) {
+      const cartoes = Array.prototype.slice.call(lp.querySelectorAll('.projeto:not(.fora)'));
+      if (!cartoes.length || getComputedStyle(cartoes[0]).position !== 'sticky') return lista;
+      const topoLista = lp.getBoundingClientRect().top + y;
+      const passo = cartoes[0].offsetHeight + parseFloat(getComputedStyle(cartoes[0]).marginBottom);
+      const paradas = cartoes.map(function (c, k) {
+        return Math.max(0, topoLista + k * passo - parseFloat(getComputedStyle(c).top));
+      });
+      lista.push({ S: 0, E: paradas[0] });
+      for (let k = 1; k < paradas.length; k++) lista.push({ S: paradas[k], E: paradas[k] });
+      const ult = lista[lista.length - 1];
+      if (lista.length === 1) { ult.E = Math.max(ult.S, maximo()); } else { lista[lista.length - 1] = { S: ult.S, E: Math.max(ult.S, maximo()) }; }
+      return lista;
+    }
+
     const defs = [
       ['home', null],
       ['sobre', null],
@@ -1278,7 +1297,7 @@ if (etiqueta) {
     alvo = gate.ancora + gate.dir * Math.min(gate.forca * CEDER, CEDER_MAX);
     iniciar();
     clearTimeout(timerGate);
-    timerGate = setTimeout(soltar, 220);
+    timerGate = setTimeout(soltar, 650);
   }
 
   window.addEventListener('wheel', function (e) {
@@ -1305,9 +1324,9 @@ if (etiqueta) {
     // 1) já está a empurrar contra uma "porta"
     if (gate) {
       if (dir === gate.dir) {
-        if (gate.chegou && agora - gate.chegou < 130) { clearTimeout(timerGate); timerGate = setTimeout(soltar, 220); return; }
+        if (gate.chegou && agora - gate.chegou < 130) { clearTimeout(timerGate); timerGate = setTimeout(soltar, 650); return; }
         gate.forca += Math.min(Math.abs(dy), 80);
-        if (gate.forca >= RESISTENCIA) {
+        if (gate.forca >= (dir > 0 ? RESISTENCIA : RESISTENCIA_VOLTAR)) {
           const i = gate.i;
           const destino = dir > 0 ? lista[i + 1].S : lista[i - 1].E;
           deslizar(destino);
@@ -1365,6 +1384,10 @@ if (etiqueta) {
     // chegou ao fim (ou ao início) da página: pára aqui e começa a "pesar"
     gate = { i: i, dir: dir, forca: 0, ancora: dir > 0 ? pg.E : pg.S, chegou: fluxo ? agora : 0 };
     if (!fluxo) gate.forca = Math.min(Math.abs(dy), 80); // um empurrão novo já conta
+    if (gate.forca >= (dir > 0 ? RESISTENCIA : RESISTENCIA_VOLTAR)) {
+      deslizar(dir > 0 ? lista[i + 1].S : lista[i - 1].E);
+      return;
+    }
     puxar();
   }, { passive: false });
 
@@ -1404,6 +1427,7 @@ if (etiqueta) {
 
   // ---- Ajustes que podes mexer ----
   const CURSO = 7;            // quanto a folha em branco desce para dentro (em "em")
+  const ATRASO = 0.2;         // quanto scroll (fração da altura do ecrã) passa antes de a impressora começar; 0 = como antes
   const FIM_ENTRADA = 0.14;   // até onde (0 a 1) a folha em branco está a entrar
   const FIM_IMPRESSAO = 0.92; // onde acaba a impressão (o resto é uma pausa antes de soltar)
 
@@ -1424,8 +1448,9 @@ if (etiqueta) {
   function progresso() {
     const r = alvo.getBoundingClientRect();
     const vh = window.innerHeight;
-    const fim = Math.max(vh - r.height - 40, 90);
-    const ini = Math.max(vh * 0.85, fim + 180);
+    const atraso = window.matchMedia('(hover: hover) and (pointer: fine)').matches ? vh * ATRASO : 0; // o espaço extra só existe com rato
+    const fim = Math.max(vh - r.height - 40, 90) - atraso;
+    const ini = Math.max(vh * 0.85, fim + atraso + 180) - atraso;
     return limitar((ini - r.top) / (ini - fim), 0, 1);
   }
 
@@ -2555,9 +2580,34 @@ if (etiqueta) {
   const lista = document.getElementById('listaProjetos');
   const barra = document.getElementById('filtros');
   const vazio = document.getElementById('filtrosVazio');
-  if (!lista || !barra) return;
+  if (!lista) return; // (o filtro por categoria só funciona se existir a barra #filtros no HTML)
 
   const pastas = Array.prototype.slice.call(lista.querySelectorAll('.projeto'));
+
+  // Cada pasta visível recebe a sua posição (--n), a cor e a aba com número e nome
+  function numerar() {
+    let n = 0;
+    const visiveis = pastas.filter(function (p) { return !p.classList.contains('fora'); });
+    lista.style.setProperty('--cnt', Math.max(1, visiveis.length));
+    visiveis.forEach(function (p) {
+      p.style.setProperty('--n', n);
+      p.dataset.n = n;
+      p.dataset.cor = n % 5;
+      let tab = p.querySelector('.pasta-tab');
+      if (!tab) {
+        tab = document.createElement('span');
+        tab.className = 'pasta-tab';
+        tab.setAttribute('aria-hidden', 'true');
+        p.insertBefore(tab, p.firstChild);
+      }
+      const nome = (p.querySelector('h3') || {}).textContent || '';
+      tab.textContent = String(n + 1).padStart(2, '0') + ' ' + nome.trim();
+      n++;
+    });
+  }
+  numerar();
+  if (!barra) return;
+
   const categoriaDe = function (p) {
     const aba = p.querySelector('.pasta-aba');
     return aba ? aba.textContent.trim() : '';
@@ -2610,6 +2660,7 @@ if (etiqueta) {
         }
       }
     });
+    numerar();
     if (vazio) vazio.hidden = visiveis > 0;
   });
 })();
