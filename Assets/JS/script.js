@@ -1140,7 +1140,8 @@ if (etiqueta) {
 (function () {
   const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const rato = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if (reduzir || !rato) return; // no telemóvel o scroll nativo já é suave
+  const toque = !rato && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  if (reduzir || (!rato && !toque)) return; // (sem rato nem toque: scroll nativo)
 
   // ---- Ajustes que podes mexer ----
   const SUAVE = 0.1;   // 0.05 = muito lento e "pesado"; 0.2 = quase sem atraso
@@ -1151,6 +1152,7 @@ if (etiqueta) {
   let atual = window.scrollY;
   let correndo = false;
   let meu = false; // true enquanto é este código a mexer no scroll
+  let direto = false; // no toque o scroll acompanha o dedo sem atraso
 
   raiz.style.scrollBehavior = 'auto'; // o deslizar passa a ser feito aqui
 
@@ -1163,7 +1165,7 @@ if (etiqueta) {
   }
 
   function mover() {
-    if (saltando) { correndo = false; return; } // durante o pulo entre páginas quem manda é o pulo
+    if (saltando || direto) { correndo = false; return; } // durante o pulo entre páginas quem manda é o pulo
     atual += (alvo - atual) * SUAVE;
     if (Math.abs(alvo - atual) < 0.5) atual = alvo;
     meu = true;
@@ -1288,35 +1290,39 @@ if (etiqueta) {
   // Largou-se a roda sem chegar ao fim do empurrão: a página volta para o sítio
   function soltar() {
     if (!gate) return;
-    alvo = gate.ancora;
+    const a = gate.ancora;
     gate = null;
-    iniciar();
+    ir(a);
+  }
+
+  // Move a página: com rato desliza suave, com o dedo acompanha-o logo
+  function ir(v) {
+    if (direto) {
+      alvo = atual = v;
+      meu = true;
+      window.scrollTo(0, v);
+      meu = false;
+    } else {
+      alvo = v;
+      iniciar();
+    }
   }
 
   function puxar() {
-    alvo = gate.ancora + gate.dir * Math.min(gate.forca * CEDER, CEDER_MAX);
-    iniciar();
+    ir(gate.ancora + gate.dir * Math.min(gate.forca * CEDER, CEDER_MAX));
     clearTimeout(timerGate);
     timerGate = setTimeout(soltar, 650);
   }
 
-  window.addEventListener('wheel', function (e) {
-    if (e.ctrlKey || e.defaultPrevented) return;
-    if (document.body.className.match(/aberta|aberto/)) return; // galeria, carta ou lightbox abertos
-    if (temScrollProprio(e.target)) return;
-    e.preventDefault();
+  // Recebe um empurrão (dy > 0 = descer) vindo da roda do rato ou do dedo
+  function empurrar(dy, fluxo) {
     const agora = performance.now();
-    const fluxo = agora - ultimaRoda < 100; // a roda/dedo ainda vem a correr (inércia do trackpad)
-    ultimaRoda = agora;
     if (saltando) return;
     if (agora < livreEm) { livreEm = Math.max(livreEm, agora + (fluxo ? 120 : 0)); return; }
-
-    const k = e.deltaMode === 1 ? 32 : e.deltaMode === 2 ? window.innerHeight : 1;
-    const dy = e.deltaY * k * FORCA;
     if (!dy) return;
     const dir = dy > 0 ? 1 : -1;
-
-    if (!correndo && !gate) { alvo = atual = window.scrollY; }
+    if (!correndo && !gate && !direto) { alvo = atual = window.scrollY; }
+    if (direto && !gate) { alvo = atual = window.scrollY; }
     const lista = paginas();
     const pos = gate ? gate.ancora : alvo;
     const T = 3;
@@ -1339,8 +1345,7 @@ if (etiqueta) {
           const base = gate.ancora;
           clearTimeout(timerGate);
           gate = null;
-          alvo = limitar(base + dy);
-          iniciar();
+          ir(limitar(base + dy));
         } else {
           puxar();
         }
@@ -1358,7 +1363,7 @@ if (etiqueta) {
       let destino = null;
       if (dir > 0) { for (let n = 0; n < lista.length; n++) if (lista[n].S > pos) { destino = lista[n].S; break; } }
       else { for (let n = lista.length - 1; n >= 0; n--) if (lista[n].E < pos) { destino = lista[n].E; break; } }
-      if (destino === null) { alvo = limitar(pos + dy); iniciar(); return; }
+      if (destino === null) { ir(limitar(pos + dy)); return; }
       deslizar(destino);
       return;
     }
@@ -1369,15 +1374,13 @@ if (etiqueta) {
 
     if (!temPorta || RESISTENCIA <= 0) {
       if (RESISTENCIA <= 0 && temPorta && (dir > 0 ? novo > pg.E : novo < pg.S)) { deslizar(dir > 0 ? lista[i + 1].S : lista[i - 1].E); return; }
-      alvo = limitar(novo);
-      iniciar();
+      ir(limitar(novo));
       return;
     }
 
     if (dir > 0 ? novo <= pg.E : novo >= pg.S) {
       // ainda dentro da página: scroll normal
-      alvo = limitar(novo);
-      iniciar();
+      ir(limitar(novo));
       return;
     }
 
@@ -1389,7 +1392,79 @@ if (etiqueta) {
       return;
     }
     puxar();
+  }
+
+  window.addEventListener('wheel', function (e) {
+    if (e.ctrlKey || e.defaultPrevented) return;
+    if (document.body.className.match(/aberta|aberto/)) return; // galeria, carta ou lightbox abertos
+    if (temScrollProprio(e.target)) return;
+    e.preventDefault();
+    const agora = performance.now();
+    const fluxo = agora - ultimaRoda < 100; // a roda/dedo ainda vem a correr (inércia do trackpad)
+    ultimaRoda = agora;
+    const k = e.deltaMode === 1 ? 32 : e.deltaMode === 2 ? window.innerHeight : 1;
+    empurrar(e.deltaY * k * FORCA, fluxo);
   }, { passive: false });
+
+  // ---- Toque (telemóvel e tablet): o mesmo efeito de páginas, com o dedo ----
+  if (toque) {
+    document.documentElement.classList.add('paginas-toque');
+    let dono = false, yAnt = 0, tAnt = 0, vel = 0, inercia = 0;
+
+    function deixaNativo(el) {
+      // coisas que usam o toque para outra coisa (manivela, paleta, cartas, galeria...)
+      if (document.body.className.match(/aberta|aberto/)) return true;
+      if (el.closest && el.closest('#manivelaAlvo, .carta-overlay, .galeria-overlay, .paleta')) return true;
+      return temScrollProprio(el);
+    }
+
+    function parar() { cancelAnimationFrame(inercia); }
+
+    window.addEventListener('touchstart', function (e) {
+      parar();
+      dono = e.touches.length === 1 && !deixaNativo(e.target);
+      if (!dono) return;
+      direto = true;
+      yAnt = e.touches[0].clientY;
+      tAnt = performance.now();
+      vel = 0;
+      if (!gate) alvo = atual = window.scrollY;
+    }, { passive: true });
+
+    window.addEventListener('touchmove', function (e) {
+      if (!dono) return;
+      if (e.cancelable) e.preventDefault();
+      const y = e.touches[0].clientY;
+      const agora = performance.now();
+      const dy = yAnt - y; // dedo para cima = descer
+      const dt = Math.max(1, agora - tAnt);
+      vel = vel * 0.6 + (dy / dt) * 0.4;
+      yAnt = y;
+      tAnt = agora;
+      ultimaRoda = agora;
+      empurrar(dy, false);
+    }, { passive: false });
+
+    function fim() {
+      if (!dono) return;
+      dono = false;
+      let v = vel * 16; // px por fotograma
+      if (Math.abs(v) < 1 || performance.now() - tAnt > 120) v = 0;
+      function passo() {
+        if (Math.abs(v) < 0.4) {
+          direto = false;
+          if (gate) soltar();
+          return;
+        }
+        empurrar(v, true);
+        v *= 0.94;
+        inercia = requestAnimationFrame(passo);
+      }
+      passo();
+    }
+    window.addEventListener('touchend', fim, { passive: true });
+    window.addEventListener('touchcancel', fim, { passive: true });
+  }
 
   // Se o scroll mudar por outro motivo (teclado, barra de scroll), acompanha
   window.addEventListener('scroll', function () {
@@ -2601,7 +2676,8 @@ if (etiqueta) {
         p.insertBefore(tab, p.firstChild);
       }
       const nome = (p.querySelector('h3') || {}).textContent || '';
-      tab.textContent = String(n + 1).padStart(2, '0') + ' ' + nome.trim();
+      tab.innerHTML = '<b>' + String(n + 1).padStart(2, '0') + '</b><span class="pasta-tab-nome"></span>';
+      tab.lastChild.textContent = ' ' + nome.trim();
       n++;
     });
   }

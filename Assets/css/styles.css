@@ -4590,35 +4590,39 @@ button,
 .pagina-projetos .projeto .capa::after { right: 7%; transform: rotate(5deg); }
 
 @media (max-width: 800px) {
-  .pagina-projetos .lista-projetos { padding-top: 0; }
-
+  /* no celular a pilha continua: pasta mais compacta e abas só com o número */
   .pagina-projetos .projeto {
-    position: relative;
-    top: auto;
-    grid-template-columns: 1fr;
-    height: auto;
-    margin-bottom: 2rem;
-    padding: 1.6rem;
-  }
-
-  .pagina-projetos .pasta-tab { display: none; }
-
-  .pagina-projetos .pasta-frente {
-    grid-column: 1;
-    grid-row: 2;
+    top: 8.8rem;
+    height: min(calc(100svh - 10.8rem), 640px);
+    margin-bottom: 12vh;
+    padding: 1.3rem 1.2rem 1.5rem;
     gap: 1rem;
-    padding: 1.4rem 0 0;
   }
+
+  .pagina-projetos .projeto::before { border-radius: 26px; }
+  .pagina-projetos .projeto[data-n="0"]::before { border-top-left-radius: 0; }
+
+  .pagina-projetos .pasta-tab {
+    top: -2.3rem;
+    height: 2.4rem;
+    padding: 0 0.9rem 0 0.7rem;
+    font-size: 0.72rem;
+  }
+
+  .pagina-projetos .pasta-tab-nome { display: none; }
+
+  .pagina-projetos .pasta-frente { gap: 0.8rem; }
+
+  .pagina-projetos .projeto h3 { font-size: 2rem; }
 
   .pagina-projetos .projeto .capa {
-    grid-column: 1;
-    grid-row: 1;
     width: 100%;
-    height: auto;
-    aspect-ratio: 4 / 3;
+    height: 100%;
+    border-radius: 18px;
+    padding: 7px;
   }
 
-  .pagina-projetos .projeto[data-n="0"]::before { border-top-left-radius: 34px; }
+  .pagina-projetos .projeto .capa img { border-radius: 12px; }
 }
 
 /* ---------- Dentro de cada projeto: mesmo visual do resto do site ---------- */
@@ -4664,5 +4668,20 @@ button,
 @media (min-width: 701px) and (max-width: 1024px) {
   .pagina-projetos .projeto {
     height: min(calc(100svh - 12rem), 640px);
+  }
+}
+
+
+/* No toque, o JavaScript controla a rolagem (efeito de páginas) */
+html.paginas-toque {
+  overscroll-behavior-y: none;
+}
+
+@media (max-width: 700px) {
+  /* Habilidades ocupa a tela toda também no celular, como uma página */
+  #habilidades.sobre-extra {
+    min-height: 100vh;
+    min-height: 100svh;
+    justify-content: center;
   }
 }
