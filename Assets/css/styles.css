@@ -4704,24 +4704,28 @@ html.paginas-toque {
   touch-action: none !important;
 }
 
-/* ---------- SOBRE: botões no celular (Ver projetos em cima, redes sociais lado a lado) ---------- */
+/* ---------- SOBRE: botões no celular (Ver projetos em cima, redes redondas e pequenas embaixo) ---------- */
 @media (max-width: 700px) {
   .sobre-botoes {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.7rem;
+    grid-template-columns: repeat(3, 44px);
+    justify-content: start;
+    gap: 0.7rem 0.6rem;
     margin-top: 0.4rem;
   }
 
   .sobre-botoes .botao-escuro {
     grid-column: 1 / -1;
-    justify-content: center;
-    min-height: 56px;
+    justify-self: start;
+    min-height: 46px;
+    padding: 0 1.3rem;
+    font-size: 0.95rem;
   }
 
   .sobre-botoes .icone-social {
-    width: 100%;
-    height: 52px;
-    border-radius: 999px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 0.9rem;
   }
 }
