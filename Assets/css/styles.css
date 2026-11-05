@@ -4398,6 +4398,10 @@ button,
 
 
 /* ---------- SOBRE: espaço extra no fim, para a impressora começar mais tarde (só com rato) ---------- */
+.duas-telas #sobre {
+  padding-bottom: calc(5.5rem + 12vh); /* toque: atraso menor */
+}
+
 @media (hover: hover) and (pointer: fine) {
   .duas-telas #sobre {
     padding-bottom: calc(5.5rem + 20vh);
@@ -4704,19 +4708,28 @@ html.paginas-toque {
   touch-action: none !important;
 }
 
-/* ---------- SOBRE: botões no celular (Ver projetos em cima, redes redondas e pequenas embaixo) ---------- */
+/* ---------- SOBRE no celular: mais espaço e tudo centrado depois do texto ---------- */
 @media (max-width: 700px) {
+  .sobre-texto > p:not(.sobre-destaque):not(:first-of-type) {
+    margin-bottom: 2.4rem;
+  }
+
+  .sobre-texto .sobre-destaque {
+    margin: 0 0 2.4rem;
+    text-align: center;
+  }
+
   .sobre-botoes {
     display: grid;
     grid-template-columns: repeat(3, 44px);
-    justify-content: start;
-    gap: 0.7rem 0.6rem;
-    margin-top: 0.4rem;
+    justify-content: center;
+    gap: 0.9rem 0.7rem;
+    margin: 0 0 3rem;
   }
 
   .sobre-botoes .botao-escuro {
     grid-column: 1 / -1;
-    justify-self: start;
+    justify-self: center;
     min-height: 46px;
     padding: 0 1.3rem;
     font-size: 0.95rem;
@@ -4728,4 +4741,486 @@ html.paginas-toque {
     border-radius: 50%;
     font-size: 0.9rem;
   }
+}
+
+/* ---------- PROCESSO: bordas arredondadas em cima e em baixo (como o começo do Sobre) ---------- */
+.processo-secao {
+  border-radius: 32px;
+  box-shadow: 0 -24px 60px -10px rgba(3, 6, 28, 0.6);
+}
+
+/* o universo já não "nasce" desfocado em cima: a borda é nítida e arredondada */
+.processo-universo {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+@media (max-width: 700px) {
+  .processo-secao {
+    border-radius: 22px;
+  }
+}
+
+/* =========================================================
+   PROJETOS: o "universo" com a onda de luz laranja (mais sutil que no Processo)
+   ========================================================= */
+.pagina-projetos .proj-universo {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.5;
+  pointer-events: none;
+  animation: projAbrir 2.4s cubic-bezier(0.5, 0, 0.2, 1) 0.35s both;
+}
+
+.pagina-projetos .proj-anel {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: -1;
+  width: 0;
+  height: 0;
+  border: 2px solid rgba(255, 170, 130, 0.55);
+  border-radius: 50%;
+  box-shadow:
+    0 0 40px 4px rgba(242, 120, 75, 0.3),
+    inset 0 0 50px 8px rgba(242, 120, 75, 0.18);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: projAnel 2.4s cubic-bezier(0.5, 0, 0.2, 1) 0.35s both;
+}
+
+@keyframes projAbrir {
+  from { clip-path: circle(0 at 50% 50%); }
+  to   { clip-path: circle(75vmax at 50% 50%); }
+}
+
+@keyframes projAnel {
+  from { width: 0; height: 0; opacity: 0.65; }
+  80%  { opacity: 0.4; }
+  to   { width: 150vmax; height: 150vmax; opacity: 0; }
+}
+
+/* cada pasta que assenta no topo solta uma onda leve atrás dela */
+.pagina-projetos .proj-pulso {
+  position: fixed;
+  left: 50%;
+  top: 55%;
+  z-index: 0;
+  width: 0;
+  height: 0;
+  border: 3px solid rgba(255, 170, 130, 0.8);
+  border-radius: 50%;
+  box-shadow: 0 0 50px 6px rgba(242, 120, 75, 0.45), inset 0 0 40px 6px rgba(242, 120, 75, 0.25);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: projPulso 1.6s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+}
+
+@keyframes projPulso {
+  from { width: 0; height: 0; opacity: 1; }
+  to   { width: 130vmax; height: 130vmax; opacity: 0; }
+}
+
+.pagina-projetos .pasta-tab-nome { margin-left: .4em; }
+
+/* =========================================================
+   CRACHÁ "PORTFOLIO PASS" (azul, com borda holográfica)
+   ========================================================= */
+/* ranhura do cordão na capa de plástico */
+.cracha-giro::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -0.2em;
+  width: 7em;
+  height: 1.1em;
+  margin-left: -3.5em;
+  border-radius: 1em;
+  background: rgba(8, 16, 60, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: inset 0 0.15em 0.3em rgba(0, 0, 0, 0.35);
+  transform: translateZ(-0.35em);
+  pointer-events: none;
+}
+
+.cara-verso {
+  padding: 0.38em;
+  border: 0;
+  border-radius: 1.5em;
+  background: linear-gradient(150deg, #ffd9ec 0%, #c9b8ff 28%, #9fd4ff 52%, #c8f5e4 76%, #fff0b8 100%);
+  box-shadow: 0 2.2em 2.6em -1.4em rgba(5, 10, 40, 0.75);
+}
+
+.cara-int {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 1.15em;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* faixa de raios azuis */
+.cara-verso .cracha-banda {
+  flex: none;
+  height: 9.2em;
+  background:
+    radial-gradient(circle at 50% 78%, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 55%),
+    repeating-conic-gradient(from 0deg at 50% 78%, #3f6fe8 0 6deg, #2a52c6 6deg 12deg);
+}
+
+.cara-verso .cracha-banda-verso {
+  height: 5.4em;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 1.4em;
+  background:
+    radial-gradient(circle at 50% 120%, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0) 60%),
+    repeating-conic-gradient(from 0deg at 50% 130%, #3f6fe8 0 6deg, #2a52c6 6deg 12deg);
+}
+
+.cara-verso .cracha-topo {
+  position: absolute;
+  top: 1.5em;
+  bottom: auto;
+  margin: 0;
+  font-size: 0.6em;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.92);
+  text-transform: uppercase;
+}
+
+.cracha-topo-esq { left: 1.9em; right: auto; text-align: left; }
+.cracha-topo-dir { right: 1.9em; left: auto; text-align: right; }
+
+/* foto circular com anel holográfico */
+.cara-verso .cracha-foto {
+  position: absolute;
+  left: 50%;
+  top: 2.9em;
+  width: 8.6em;
+  margin-left: -4.3em;
+  padding: 0.38em;
+  border-radius: 50%;
+  background: conic-gradient(#ffe9a8, #ff9fd0, #b79cff, #8fd0ff, #b8f3dc, #ffe9a8);
+  box-shadow: 0 0.6em 1em -0.4em rgba(10, 20, 80, 0.55);
+  z-index: 2;
+}
+
+.cara-verso .cracha-corpo {
+  flex: 1;
+  min-height: 0;
+  padding: 3.2em 1.4em 1.1em;
+  align-items: center;
+}
+
+.cara-verso .cracha-nome {
+  margin: 0;
+  font-family: "Anton", var(--fonte-titulo);
+  font-size: 2.1em;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #14266b;
+}
+
+.cara-verso .cracha-funcao {
+  margin: 0.9em 0 0;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  font-size: 0.62em;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  line-height: 1.7;
+  text-transform: uppercase;
+  color: #3d62d4;
+}
+
+.cracha-linha {
+  width: 100%;
+  height: 1px;
+  margin: 1.1em 0 0.9em;
+  background: rgba(37, 71, 160, 0.35);
+}
+
+.cracha-meio {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+}
+
+.cracha-status small {
+  display: block;
+  font-size: 0.5em;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #14266b;
+}
+
+.cracha-status span {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  margin-top: 0.5em;
+  font-size: 0.66em;
+  font-weight: 700;
+  color: #14266b;
+}
+
+.cracha-status i {
+  width: 0.8em;
+  height: 0.8em;
+  border-radius: 50%;
+  background: #4caf50;
+  box-shadow: 0 0 0.6em rgba(76, 175, 80, 0.7);
+}
+
+.cracha-assinatura {
+  margin: 0;
+  font-family: "Dancing Script", cursive;
+  font-size: 1.9em;
+  font-weight: 700;
+  line-height: 1;
+  color: #2547a0;
+  transform: rotate(-6deg);
+}
+
+.cara-verso .cracha-fim {
+  margin-top: auto;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1em;
+}
+
+.cara-verso .cracha-barras {
+  width: 55%;
+  height: 2.1em;
+  opacity: 1;
+}
+
+.cracha-selo {
+  width: 2.7em;
+  height: 2.7em;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 0.22em solid #3d62d4;
+  box-shadow: 0 0 0 0.18em #dfe8ff;
+  -webkit-user-drag: none;
+}
+
+.cracha-selo-topo {
+  width: 2.5em;
+  height: 2.5em;
+  margin-left: auto;
+  border-color: #fff;
+  box-shadow: 0 0 0 0.16em rgba(255, 255, 255, 0.35);
+}
+
+/* VERSO */
+.cara-verso .cracha-titulo {
+  margin: 0;
+  font-family: "Anton", var(--fonte-titulo);
+  font-size: 2.2em;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-transform: uppercase;
+  text-align: left;
+  color: #fff;
+}
+
+.cara-verso .cracha-lista {
+  flex: none;
+  width: auto;
+  margin: 1.1em 1.1em 0;
+  gap: 0.6em;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.cara-verso .cracha-lista a {
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+  padding: 0.7em 0.8em;
+  border-radius: 1em;
+  background: #e6edff;
+  font-size: 1em;
+  text-decoration: none;
+  color: #14266b;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.cara-verso .cracha-lista li:nth-child(odd) a { transform: rotate(0.6deg); }
+.cara-verso .cracha-lista li:nth-child(even) a { transform: rotate(-0.4deg); }
+
+.cara-verso .cracha-lista a:hover {
+  background: #d3deff;
+  color: #14266b;
+}
+
+.cracha-lista .ico {
+  flex: none;
+  width: 2.5em;
+  height: 2.5em;
+  display: grid;
+  place-items: center;
+  border-radius: 0.75em;
+  background: linear-gradient(135deg, #ffe08a, #ff9fd0 50%, #9fb8ff);
+}
+
+.cracha-lista .ico svg {
+  width: 1.35em;
+  height: 1.35em;
+  fill: none;
+  stroke: #14266b;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cracha-lista .txt {
+  min-width: 0;
+}
+
+.cracha-lista b {
+  display: block;
+  font-family: "Anton", var(--fonte-titulo);
+  font-size: 1em;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.cara-verso .cracha-lista small {
+  display: block;
+  margin-top: 0.15em;
+  font-size: 0.62em;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #3a4a85;
+  overflow-wrap: anywhere;
+}
+
+.cracha-verso-fim {
+  margin-top: auto;
+  padding: 0 1.4em 1.2em;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1em;
+}
+
+.cracha-verso-fim .cracha-lema {
+  margin: 0;
+  font-family: "Dancing Script", cursive;
+  font-size: 1.15em;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #2547a0;
+}
+
+.cracha-verso-fim .cracha-barras {
+  width: 40%;
+  height: 2em;
+}
+
+@media (max-width: 700px) {
+  .cara .cracha-lista a { padding: 0.55em 0.7em; }
+}
+
+/* ajustes do crachá (2) */
+.cara-verso .cracha-foto {
+  background: conic-gradient(#f2f5ff, #7b86a2, #fbfcff, #56617c, #d3daec, #8993ad, #f2f5ff);
+  box-shadow: 0 0.9em 1.2em -0.5em rgba(5, 10, 40, 0.55);
+}
+
+.cracha-assinatura {
+  font-family: "Lilita One", var(--fonte-titulo);
+  font-size: 2em;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--laranja);
+}
+
+.cara-verso .cracha-selo {
+  width: 3.9em;
+  height: 3.9em;
+  border: 0;
+  box-shadow: none;
+}
+
+.cracha-lista b {
+  font-size: 0.8em;
+  letter-spacing: 0.06em;
+}
+
+.cara-verso .cracha-lista small {
+  font-size: 0.8em;
+  font-weight: 700;
+  margin-top: 0.2em;
+  color: #14266b;
+}
+
+/* ajustes do crachá (3) */
+.cracha-dir {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25em;
+}
+
+.cracha-dir .cracha-assinatura {
+  transform: rotate(-4deg);
+}
+
+.cracha-status span {
+  font-size: 0.88em;
+}
+
+.cracha-status small {
+  font-size: 0.6em;
+}
+.cara-verso .cracha-dir .cracha-assinatura { font-size: 1.75em; }
+.cara-verso .cracha-dir .cracha-selo { width: 3.5em; height: 3.5em; }
+
+/* a foto da frente nunca aparece no verso */
+.cara,
+.cara-int,
+.cara-int * {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.cara-frente { transform: translateZ(0.02em); }
+.cara-verso { transform: rotateY(180deg) translateZ(0.02em); }
+
+
+/* frente: como antes, com o estado "disponível" no lugar do cargo */
+.cracha-funcao {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+}
+
+.cracha-ponto {
+  width: 0.9em;
+  height: 0.9em;
+  border-radius: 50%;
+  background: #2fa84f;
+  box-shadow: 0 0 0 0.2em rgba(47, 168, 79, 0.28);
 }

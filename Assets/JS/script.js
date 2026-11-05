@@ -747,7 +747,11 @@ if (etiqueta) {
     requestAnimationFrame(loop);
   }
 
+  let ultimaVirada = Date.now();
+  let viradaManual = false;
+
   function virar() {
+    ultimaVirada = Date.now();
     flipAlvo += 180;
     if (reduzir) {
       flip = flipAlvo;
@@ -837,7 +841,7 @@ if (etiqueta) {
     }
 
     toque = null;
-    if (clicou) virar();
+    if (clicou) { virar(); viradaManual = true; }
   }
 
   cracha.addEventListener('pointerup', soltar);
@@ -849,8 +853,23 @@ if (etiqueta) {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       virar();
+      viradaManual = true;
     }
   });
+
+  // Vira sozinho de tempos a tempos (mais devagar depois de a pessoa o ter virado)
+  const ESPERA_AUTO = 5000;
+  const ESPERA_APOS_TOQUE = 9000;
+  setInterval(function () {
+    if (reduzir || !visivel || document.hidden || arrastando) return;
+    if (home.classList.contains('intro-ativa')) return;
+    if (giro.matches(':focus-within') || cracha.querySelector('a:hover')) { ultimaVirada = Date.now(); return; }
+    if (Math.abs(flipAlvo - flip) > 20) return;
+    const espera = viradaManual ? ESPERA_APOS_TOQUE : ESPERA_AUTO;
+    if (Date.now() - ultimaVirada < espera) return;
+    viradaManual = false;
+    virar();
+  }, 500);
 
   // Só simula enquanto a home está visível
   if ('IntersectionObserver' in window) {
@@ -1092,21 +1111,33 @@ if (etiqueta) {
   if (!secao || !universo || !anel) return;
 
   const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let pedido = false;
 
   function suavizar(t) {
     return t * t * (3 - 2 * t);
   }
 
-  function atualizar() {
-    pedido = false;
+  // ---- Ajustes que podes mexer ----
+  const ATRASO = 400;    // espera (ms) antes de a onda de luz começar a abrir
+  const ABRIR = 1800;    // quanto tempo (ms) a onda leva a abrir por completo
+  const FECHAR = 700;    // e a fechar quando voltas atrás
+
+  let mostrado = 0;      // quanto do portal já está aberto (0 a 1)
+  let liberadoEm = 0;
+  let rodando = false;
+  let ultimo = 0;
+
+  // quanto o scroll "pede" (0 quando o topo da secção entra no ecrã, 1 quando já está no topo)
+  function pedido() {
+    if (reduzir) return 1;
+    const vh = window.innerHeight;
+    const r = secao.getBoundingClientRect();
+    return Math.max(0, Math.min(1, (vh - r.top) / (vh * 0.9)));
+  }
+
+  function desenhar(p) {
     const vh = window.innerHeight;
     const vw = window.innerWidth;
     const r = secao.getBoundingClientRect();
-
-    // 0 quando o topo da secção entra no ecrã, 1 quando já está quase no topo
-    let p = reduzir ? 1 : (vh - r.top) / (vh * 0.9);
-    p = Math.max(0, Math.min(1, p));
 
     if (p >= 1) {
       universo.style.clipPath = 'none';
@@ -1125,15 +1156,47 @@ if (etiqueta) {
     anel.style.opacity = p > 0.02 ? String(Math.min(1, (1 - p) * 2.2)) : '0';
   }
 
+  function passo(t) {
+    const dt = Math.min(64, t - (ultimo || t));
+    ultimo = t;
+    const alvoP = pedido();
+
+    if (reduzir) {
+      mostrado = alvoP;
+    } else if (alvoP > mostrado) {
+      // começa depois de uma pequena espera e abre devagar, mesmo que o scroll já tenha passado
+      if (mostrado < 0.001 && !liberadoEm) liberadoEm = t + ATRASO;
+      if (t >= liberadoEm) mostrado = Math.min(alvoP, mostrado + dt / ABRIR);
+    } else {
+      liberadoEm = 0;
+      mostrado = Math.max(alvoP, mostrado - dt / FECHAR);
+    }
+
+    desenhar(mostrado);
+
+    if (Math.abs(mostrado - alvoP) > 0.0005 || (alvoP > mostrado)) {
+      requestAnimationFrame(passo);
+    } else {
+      rodando = false;
+      ultimo = 0;
+      if (mostrado < 0.001) liberadoEm = 0;
+    }
+  }
+
   function pedir() {
-    if (pedido) return;
-    pedido = true;
-    requestAnimationFrame(atualizar);
+    if (rodando) return;
+    rodando = true;
+    ultimo = 0;
+    requestAnimationFrame(passo);
   }
 
   window.addEventListener('scroll', pedir, { passive: true });
   window.addEventListener('resize', pedir);
-  atualizar();
+
+  // arranque: se já estiver dentro da secção (recarregar a página), mostra tudo logo
+  mostrado = pedido() >= 1 ? 1 : 0;
+  desenhar(mostrado);
+  pedir();
 })();
 
 // ----- Scroll suave: a página desliza com um pequeno atraso, como se fosse empurrada -----
@@ -1525,7 +1588,7 @@ if (etiqueta) {
   function progresso() {
     const r = alvo.getBoundingClientRect();
     const vh = window.innerHeight;
-    const atraso = window.matchMedia('(hover: hover) and (pointer: fine)').matches ? vh * ATRASO : 0; // o espaço extra só existe com rato
+    const atraso = vh * (window.matchMedia('(hover: hover) and (pointer: fine)').matches ? ATRASO : 0.12); // com toque o atraso é menor
     const fim = Math.max(vh - r.height - 40, 90) - atraso;
     const ini = Math.max(vh * 0.85, fim + atraso + 180) - atraso;
     return limitar((ini - r.top) / (ini - fim), 0, 1);
@@ -2365,7 +2428,7 @@ if (etiqueta) {
 
   const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const temRato = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if (dica && !temRato) dica.innerHTML = 'Gire a manivela &#8635;';
+  if (dica && !temRato) dica.innerHTML = 'Toque na manivela (ou gire com o dedo) &#8635;';
 
   // ---- Ajustes que podes mexer ----
   const TEMPO_VOLTA = 1100;   // duração de uma volta completa ao clicar/tocar (ms)
@@ -2975,4 +3038,51 @@ const PROJETOS = [
       else if (!e.shiftKey && document.activeElement === ultimo) { e.preventDefault(); primeiro.focus(); }
     }
   });
+})();
+// ----- Projetos: universo com onda de luz e uma onda leve quando cada pasta assenta -----
+(function () {
+  if (!document.body.classList.contains('pagina-projetos')) return;
+  const lista = document.getElementById('listaProjetos');
+  if (!lista) return;
+
+  // o fundo escuro com pontinhos e estrelas é o mesmo do Processo
+  const universo = document.createElement('div');
+  universo.className = 'processo-universo proj-universo';
+  universo.setAttribute('aria-hidden', 'true');
+  const anel = document.createElement('div');
+  anel.className = 'proj-anel';
+  anel.setAttribute('aria-hidden', 'true');
+  document.body.insertBefore(anel, document.body.firstChild);
+  document.body.insertBefore(universo, document.body.firstChild);
+
+  // quando uma pasta nova chega ao topo, sai uma onda
+  let assentadas = 0;
+  let pedido = false;
+
+  function verificar() {
+    pedido = false;
+    const cartoes = Array.prototype.slice.call(lista.querySelectorAll('.projeto:not(.fora)'));
+    if (!cartoes.length || getComputedStyle(cartoes[0]).position !== 'sticky') { assentadas = 0; return; }
+    const topo = parseFloat(getComputedStyle(cartoes[0]).top) || 0;
+    let n = 0;
+    cartoes.forEach(function (c) {
+      if (c.getBoundingClientRect().top <= topo + 3) n++;
+    });
+    if (n > assentadas && assentadas > 0) {
+      const r = cartoes[n - 1].getBoundingClientRect();
+      const pulso = document.createElement('div');
+      pulso.className = 'proj-pulso';
+      pulso.style.top = (r.top + r.height / 2).toFixed(0) + 'px';
+      document.body.appendChild(pulso);
+      setTimeout(function () { pulso.remove(); }, 1800);
+    }
+    assentadas = n;
+  }
+
+  window.addEventListener('scroll', function () {
+    if (pedido) return;
+    pedido = true;
+    requestAnimationFrame(verificar);
+  }, { passive: true });
+  verificar();
 })();
