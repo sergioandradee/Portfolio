@@ -5355,3 +5355,7 @@ html.paginas-toque {
     font-size: 0.8rem;
   }
 }
+
+/* o <span> vazio do botão ocupava espaço e descentrava o texto */
+.botao-escuro span:empty { display: none; }
+.botao-escuro { justify-content: center; }
