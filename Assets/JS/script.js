@@ -1,3 +1,241 @@
+// ----- Idioma: botão PT / ES que troca todos os textos do site -----
+// Para traduzir mais uma frase, acrescenta uma linha  'texto em português': 'texto en español',  na lista DICIONARIO.
+(function () {
+  const DICIONARIO = {
+    // menu
+    'Home': 'Inicio', 'Sobre': 'Sobre mí', 'Criar': 'Crear', 'Projetos': 'Proyectos',
+    'Abrir menu': 'Abrir menú',
+    // títulos da página
+    'Sergio Andrade | Designer Multimídia': 'Sergio Andrade | Diseñador Multimedia',
+    'Portfólio de Sergio Andrade, designer multimídia.': 'Portafolio de Sergio Andrade, diseñador multimedia.',
+    'Projetos | Sergio Andrade': 'Proyectos | Sergio Andrade',
+    // home e crachá
+    'Designer Multimídia': 'Diseñador Multimedia',
+    'Crachá de Sergio Andrade. Clica ou carrega em Enter para virar.': 'Credencial de Sergio Andrade. Haz clic o pulsa Enter para darle la vuelta.',
+    'Portfólio': 'Portafolio',
+    'Disponível para projetos': 'Disponible para proyectos',
+    'Clique para virar ↻': 'Haz clic para girar ↻',
+    'testar e evoluir.': 'probar y evolucionar.',
+    'Mudar as cores da Home': 'Cambiar los colores del Inicio',
+    'Mudar as cores': 'Cambiar los colores',
+    // sobre
+    'Sobre mim': 'Acerca de mí',
+    'Designer multimídia.': 'Diseñador multimedia.',
+    'Sempre a experimentar.': 'Siempre experimentando.',
+    'Olá, me chamo Sergio': 'Hola, me llamo Sergio',
+    'O design, para mim, é uma forma de transformar ideias em experiências visuais. É explorar, experimentar e encontrar novas maneiras de comunicar aquilo que nem sempre precisa de ser dito com palavras.':
+      'El diseño, para mí, es una forma de transformar ideas en experiencias visuales. Es explorar, experimentar y encontrar nuevas maneras de comunicar aquello que no siempre necesita decirse con palabras.',
+    'Experimentar, testar e evoluir.': 'Experimentar, probar y evolucionar.',
+    'Ver projetos': 'Ver proyectos',
+    'Animação do meu personagem': 'Animación de mi personaje',
+    'Vamos criar algo juntos?': '¿Creamos algo juntos?',
+    'PRONTO': 'LISTO', 'A PUXAR...': 'TIRANDO...', 'IMPRIMINDO': 'IMPRIMIENDO', 'CONCLUÍDO': 'COMPLETADO',
+    // habilidades
+    'Identidade visual': 'Identidad visual', 'Ilustrações': 'Ilustraciones', 'Design editorial': 'Diseño editorial',
+    'Marketing digital': 'Marketing digital', 'Cartazes': 'Carteles', 'Tipografia': 'Tipografía',
+    'Programação': 'Programación', 'Idealização de marca': 'Ideación de marca',
+    'Cada habilidade é uma peça': 'Cada habilidad es una pieza',
+    'A encaixar as habilidades...': 'Encajando las habilidades...',
+    'Habilidades encaixadas ✓': 'Habilidades encajadas ✓',
+    'Próxima': 'Siguiente', 'Peças': 'Piezas', '↻ Jogar de novo': '↻ Jugar de nuevo',
+    // processo
+    'Processo': 'Proceso',
+    'Ouvir': 'Escuchar',
+    'Entender a marca, o público e o objetivo antes de desenhar qualquer coisa.': 'Entender la marca, el público y el objetivo antes de dibujar cualquier cosa.',
+    'Explorar': 'Explorar',
+    'Referências, croquis soltos e muitas ideias em cima da mesa.': 'Referencias, bocetos sueltos y muchas ideas sobre la mesa.',
+    'Dar forma ao conceito escolhido, com cor, tipografia e composição.': 'Dar forma al concepto elegido, con color, tipografía y composición.',
+    'Refinar': 'Refinar',
+    'Testar, ajustar os detalhes e entregar tudo pronto a usar.': 'Probar, ajustar los detalles y entregar todo listo para usar.',
+    'Chegamos ao fim do processo.': 'Llegamos al final del proceso.',
+    // conversa e correio
+    'Tens um projeto em mente? Conta-me a ideia e vemos como a pôr de pé.': '¿Tienes un proyecto en mente? Cuéntame la idea y vemos cómo hacerla realidad.',
+    'Enviar email': 'Enviar email',
+    'Ou toque na manivela do correio ↻': 'O toca la manivela del correo ↻',
+    'Toque na manivela (ou gire com o dedo) ↻': 'Toca la manivela (o gira con el dedo) ↻',
+    'CORREIO': 'CORREO',
+    'Girar a manivela para tirar uma carta do correio': 'Girar la manivela para sacar una carta del correo',
+    'Carta do correio': 'Carta del correo',
+    'Fechar carta': 'Cerrar carta',
+    'Carta 1 · Contactos': 'Carta 1 · Contactos',
+    'Conta-me a tua ideia. Respondo o mais depressa que puder.': 'Cuéntame tu idea. Te respondo lo más rápido que pueda.',
+    'Copiado!': '¡Copiado!',
+    'Carta 2 · Projetos': 'Carta 2 · Proyectos',
+    'Queres ver o que já fiz?': '¿Quieres ver lo que ya hice?',
+    'Identidades, ilustrações, cartazes e mais. Passa pela galeria de projetos e vê como cada ideia ganhou forma.':
+      'Identidades, ilustraciones, afiches y más. Pasa por la galería de proyectos y mira cómo cada idea tomó forma.',
+    // projetos
+    'Em breve': 'Próximamente', 'Aguarda': 'Espera',
+    'Projeto em breve': 'Proyecto próximamente',
+    // página de projeto
+    '← Todos os projetos': '← Todos los proyectos',
+    'Categoria': 'Categoría', 'Ferramentas': 'Herramientas', 'Ano': 'Año',
+    'Descrição:': 'Descripción:',
+    'Explora o projeto ↓': 'Explora el proyecto ↓',
+    'Ver em tela cheia ⤢': 'Ver en pantalla completa ⤢',
+    'Próximo projeto': 'Siguiente proyecto',
+    'Ver todos os projetos': 'Ver todos los proyectos',
+    'Sair ×': 'Salir ×',
+    'Imagem anterior': 'Imagen anterior', 'Imagem seguinte': 'Imagen siguiente',
+    // descrições dos projetos
+    'O projeto de identidade visual Dama Centeio busca traduzir o cuidado e a delicadeza da panificação artesanal por meio de uma estética elegante, acolhedora e atemporal. A marca ganha vida através de uma tipografia marcante, uma paleta de tons terrosos e uma ilustração feminina que representa o lado humano e cuidadoso por trás de cada produto. O resultado é uma identidade que busca tornar cada detalhe da experiência mais especial, autêntico e memorável.':
+      'El proyecto de identidad visual Dama Centeio busca traducir el cuidado y la delicadeza de la panadería artesanal a través de una estética elegante, acogedora y atemporal. La marca cobra vida mediante una tipografía llamativa, una paleta de tonos terrosos y una ilustración femenina que representa el lado humano y cuidadoso detrás de cada producto. El resultado es una identidad que busca hacer cada detalle de la experiencia más especial, auténtico y memorable.',
+    'Sojou nasce da vontade de dar uma nova cara ao tofu. Uma marca que combina sabor, criatividade e atitude para transformar um alimento versátil em uma experiência divertida e cheia de personalidade. Seus mascotes dão vida à marca, traduzindo de forma descontraída e expressiva a diversidade de sabores e o espírito único da Sojou.':
+      'Sojou nace del deseo de darle una nueva cara al tofu. Una marca que combina sabor, creatividad y actitud para convertir un alimento versátil en una experiencia divertida y llena de personalidad. Sus mascotas dan vida a la marca, traduciendo de forma desenfadada y expresiva la diversidad de sabores y el espíritu único de Sojou.',
+    'Projeto de identidade visual e manual de marca para a Bloom Coffee, uma cafeteria de cafés especiais que une a nostalgia do estilo vintage à leveza do design contemporâneo. O conceito traduz uma paleta de tons quentes, tipografia expressiva, um mascote cheio de personalidade e aplicações em embalagens e papelaria.':
+      'Proyecto de identidad visual y manual de marca para Bloom Coffee, una cafetería de cafés de especialidad que une la nostalgia del estilo vintage con la ligereza del diseño contemporáneo. El concepto traduce una paleta de tonos cálidos, tipografía expresiva, una mascota llena de personalidad y aplicaciones en empaques y papelería.',
+    'Projeto de personal branding desenvolvido para explorar a minha identidade visual como Designer Multimídia. O projeto combina ilustração, tipografia, cores e motion para criar um sistema visual que reflete a minha personalidade, processo criativo e forma de trabalhar.':
+      'Proyecto de personal branding desarrollado para explorar mi identidad visual como Diseñador Multimedia. El proyecto combina ilustración, tipografía, colores y motion para crear un sistema visual que refleja mi personalidad, mi proceso creativo y mi forma de trabajar.',
+    'Projeto editorial conceitual e ilustrações autorais para o livro LUMINA. Através de formas orgânicas, paleta de tons terrosos e tipografia clássica, o projeto visual mapeia a essência do processo criativo. Da mentalização da ideia e croquis soltos até o design finalizado.':
+      'Proyecto editorial conceptual e ilustraciones de autoría propia para el libro LUMINA. A través de formas orgánicas, una paleta de tonos terrosos y tipografía clásica, el proyecto visual mapea la esencia del proceso creativo. Desde la mentalización de la idea y los bocetos sueltos hasta el diseño finalizado.',
+    "Série de cartazes do filme Vivarium. O projeto explora o conceito 'A ilusão do caminho como um percurso vital em direção a um destino inalcançável' através de três linguagens visuais (tipográfica, ilustrada e fotográfica). O caminho, a sensação de confinamento e o espaço funcionam como elementos centrais para representar diferentes formas de um percurso cujo destino nunca chega a se concretizar.":
+      "Serie de afiches de la película Vivarium. El proyecto explora el concepto 'La ilusión del camino como un recorrido vital hacia un destino inalcanzable' a través de tres lenguajes visuales (tipográfico, ilustrado y fotográfico). El camino, la sensación de encierro y el espacio funcionan como elementos centrales para representar distintas formas de un recorrido cuyo destino nunca llega a concretarse."
+  };
+
+  // frases com partes que mudam (números, nomes de projeto...)
+  const REGRAS = [
+    [/DESIGNER MULTIMÍDIA/g, 'DISEÑADOR MULTIMEDIA', /DISEÑADOR MULTIMEDIA/g, 'DESIGNER MULTIMÍDIA'],
+    [/^(.*) — imagem de capa$/, '$1 — imagen de portada', /^(.*) — imagen de portada$/, '$1 — imagem de capa'],
+    [/^(.*) — imagem (\d+)$/, '$1 — imagen $2', /^(.*) — imagen (\d+)$/, '$1 — imagem $2'],
+    [/^Ver imagem (\d+)$/, 'Ver imagen $1', /^Ver imagen (\d+)$/, 'Ver imagem $1'],
+    [/^Galeria: (.*)$/, 'Galería: $1', /^Galería: (.*)$/, 'Galeria: $1']
+  ];
+
+  const ES = {};
+  const PT = {};
+  Object.keys(DICIONARIO).forEach(function (k) {
+    const v = DICIONARIO[k];
+    if (k === v) return;
+    ES[k] = v;
+    if (!(v in PT)) PT[v] = k;
+  });
+
+  let lingua = 'pt';
+  try { if (localStorage.getItem('idioma') === 'es') lingua = 'es'; } catch (e) {}
+
+  function traduzir(texto, para) {
+    if (!texto) return texto;
+    const meio = texto.replace(/\s+/g, ' ').trim();
+    if (!meio) return texto;
+    const mapa = para === 'es' ? ES : PT;
+    let novo = mapa[meio];
+    if (novo === undefined) {
+      novo = meio;
+      REGRAS.forEach(function (r) {
+        const de = para === 'es' ? r[0] : r[2];
+        const pa = para === 'es' ? r[1] : r[3];
+        novo = novo.replace(de, pa);
+      });
+      if (novo === meio) return texto;
+    }
+    const ini = texto.match(/^\s*/)[0];
+    const fim = texto.match(/\s*$/)[0];
+    return ini + novo + fim;
+  }
+  window.T = function (texto) { return traduzir(texto, lingua); };
+
+  const ATRIBUTOS = ['aria-label', 'alt', 'title'];
+  const IGNORAR = { SCRIPT: 1, STYLE: 1, NOSCRIPT: 1, TEXTAREA: 1 };
+  let aplicando = false;
+
+  function traduzirNo(no, para) {
+    if (no.nodeType === 3) {
+      const pai = no.parentNode;
+      if (pai && IGNORAR[pai.nodeName]) return;
+      const novo = traduzir(no.data, para);
+      if (novo !== no.data) no.data = novo;
+      return;
+    }
+    if (no.nodeType !== 1 || IGNORAR[no.nodeName]) return;
+    ATRIBUTOS.forEach(function (a) {
+      if (!no.hasAttribute(a)) return;
+      const v = no.getAttribute(a);
+      const n = traduzir(v, para);
+      if (n !== v) no.setAttribute(a, n);
+    });
+    if (no.nodeName === 'META' && no.getAttribute('name') === 'description') {
+      const v = no.getAttribute('content');
+      const n = traduzir(v, para);
+      if (n !== v) no.setAttribute('content', n);
+    }
+    for (let c = no.firstChild; c; c = c.nextSibling) traduzirNo(c, para);
+  }
+
+  // as letras do cargo da Home são peças soltas: refaz-se o conjunto na nova língua
+  function refazerCargo(para) {
+    const el = document.getElementById('homeCargo');
+    if (!el || !el.querySelector('.ch')) return;
+    const atual = el.textContent;
+    const novo = traduzir(atual, para);
+    if (novo === atual) return;
+    const ligadas = el.querySelector('.ch.on') !== null;
+    el.innerHTML = novo.split('').map(function (c) {
+      if (c === ' ') return ' ';
+      return '<span class="ch' + (ligadas ? ' on' : '') + '">' + c + '</span>';
+    }).join('');
+    el.setAttribute('aria-label', novo);
+    window.dispatchEvent(new Event('resize'));
+  }
+
+  function aplicar(para) {
+    aplicando = true;
+    traduzirNo(document.documentElement, para);
+    refazerCargo(para);
+    document.documentElement.lang = para;
+    aplicando = false;
+  }
+
+  // textos criados mais tarde pelo JavaScript também são traduzidos
+  const olho = new MutationObserver(function (lista) {
+    if (aplicando || lingua !== 'es') return;
+    aplicando = true;
+    lista.forEach(function (m) {
+      if (m.type === 'characterData') traduzirNo(m.target, 'es');
+      else if (m.type === 'attributes') traduzirNo(m.target, 'es');
+      else m.addedNodes.forEach(function (n) { traduzirNo(n, 'es'); });
+    });
+    aplicando = false;
+  });
+  function vigiar() {
+    olho.disconnect();
+    if (lingua !== 'es') return;
+    olho.observe(document.documentElement, {
+      childList: true, subtree: true, characterData: true,
+      attributes: true, attributeFilter: ATRIBUTOS
+    });
+  }
+
+  // o botão
+  const botao = document.createElement('button');
+  botao.type = 'button';
+  botao.className = 'idioma';
+  botao.innerHTML =
+    '<span class="idioma-fundo" aria-hidden="true"></span>' +
+    '<span class="idioma-op" data-l="pt">PT</span>' +
+    '<span class="idioma-op" data-l="es">ES</span>';
+
+  function marcarBotao() {
+    botao.setAttribute('data-lingua', lingua);
+    botao.setAttribute('aria-label', lingua === 'es' ? 'Cambiar a portugués' : 'Mudar para espanhol');
+    botao.setAttribute('title', lingua === 'es' ? 'Português' : 'Español');
+  }
+
+  botao.addEventListener('click', function () {
+    lingua = lingua === 'es' ? 'pt' : 'es';
+    try { localStorage.setItem('idioma', lingua); } catch (e) {}
+    aplicar(lingua);
+    vigiar();
+    marcarBotao();
+  });
+
+  document.body.appendChild(botao);
+  marcarBotao();
+  if (lingua === 'es') {
+    aplicar('es');
+    vigiar();
+  }
+})();
+
 // ----- Menu do telemóvel -----
 const menu = document.querySelector('.menu');
 const botao = document.getElementById('botao-menu');
@@ -1479,7 +1717,7 @@ if (etiqueta) {
     function deixaNativo(el) {
       // coisas que usam o toque para outra coisa (manivela, paleta, cartas, galeria...)
       if (document.body.className.match(/aberta|aberto/)) return true;
-      if (el.closest && el.closest('#manivelaAlvo, .carta-overlay, .galeria-overlay, .paleta')) return true;
+      if (el.closest && el.closest('#manivelaAlvo, .carta-overlay, .galeria-overlay, .paleta, .idioma')) return true;
       return temScrollProprio(el);
     }
 
@@ -1621,6 +1859,7 @@ if (etiqueta) {
     if (imp >= 1) texto = 'CONCLUÍDO';
     else if (imp > 0) texto = 'IMPRIMINDO';
     else if (entrada > 0) texto = 'A PUXAR...';
+    if (window.T) texto = window.T(texto);
     if (lcd.textContent !== texto) lcd.textContent = texto;
 
     const mexeu = Math.abs(p - anterior) > 0.0003;

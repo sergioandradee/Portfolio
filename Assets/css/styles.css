@@ -5224,3 +5224,68 @@ html.paginas-toque {
   background: #2fa84f;
   box-shadow: 0 0 0 0.2em rgba(47, 168, 79, 0.28);
 }
+
+/* =========================================================
+   BOTÃO DE IDIOMA (PT / ES)
+   ========================================================= */
+.idioma {
+  position: fixed;
+  top: 36px;
+  right: 24px;
+  z-index: 30;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  width: 82px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(20, 38, 107, 0.72);
+  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.7);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  font: 700 0.74rem/1 var(--fonte-corpo, "DM Sans", sans-serif);
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.idioma-op {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  transition: color 0.3s;
+}
+
+.idioma-fundo {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  height: calc(100% - 6px);
+  border-radius: 999px;
+  background: var(--laranja, #f2784b);
+  transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.idioma[data-lingua="es"] .idioma-fundo { transform: translateX(100%); }
+.idioma[data-lingua="pt"] .idioma-op[data-l="pt"],
+.idioma[data-lingua="es"] .idioma-op[data-l="es"] { color: #fff; }
+
+.idioma:hover { border-color: rgba(255, 255, 255, 0.7); }
+.idioma:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+/* ecrãs estreitos: o menu ocupa o topo, então o botão vai para o canto de baixo */
+@media (max-width: 1000px) {
+  .idioma {
+    top: auto;
+    right: auto;
+    left: 12px;
+    bottom: 10px;
+    width: 68px;
+    height: 30px;
+    font-size: 0.66rem;
+  }
+}
