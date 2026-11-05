@@ -5359,3 +5359,29 @@ html.paginas-toque {
 /* o <span> vazio do botão ocupava espaço e descentrava o texto */
 .botao-escuro span:empty { display: none; }
 .botao-escuro { justify-content: center; }
+
+/* final do Processo: frase numa linha, mais pequena, botão pequeno e centrado por baixo */
+.trilha-fim { gap: 0.9rem; }
+
+.trilha-fim-texto {
+  font-size: clamp(1.05rem, 2vw, 1.5rem);
+  white-space: nowrap;
+}
+
+.trilha-fim .botao {
+  padding: 0.55rem 1.3rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .trilha-fim {
+    align-items: center;
+    padding-left: 60px;
+    padding-right: 8px;
+    text-align: center;
+  }
+
+  .trilha-fim-texto { font-size: clamp(0.95rem, 4.6vw, 1.3rem); }
+}
