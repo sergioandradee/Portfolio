@@ -3325,3 +3325,10 @@ const PROJETOS = [
   }, { passive: true });
   verificar();
 })();
+
+// ----- Dica da manivela: passa para junto da manivela, como um pequeno detalhe -----
+(function () {
+  const dica = document.getElementById('correioDica');
+  const cena = document.getElementById('correioCena');
+  if (dica && cena) cena.appendChild(dica);
+})();

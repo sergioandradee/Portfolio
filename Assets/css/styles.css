@@ -5289,3 +5289,69 @@ html.paginas-toque {
     font-size: 0.66rem;
   }
 }
+
+/* =========================================================
+   Detalhes pequenos: botões do correio lado a lado, dica junto à manivela, "Abrir" discreto
+   ========================================================= */
+@media (max-width: 800px) {
+  .correio .cta-botoes {
+    flex-wrap: nowrap;
+    gap: 0.6rem;
+  }
+
+  .correio .cta-botoes .botao {
+    padding: 0.7rem 1rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+}
+
+.correio-cena .correio-dica {
+  position: absolute;
+  right: 0;
+  top: 77%;
+  z-index: 2;
+  width: 46%;
+  margin: 0;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+  text-align: right;
+  text-transform: uppercase;
+  color: var(--lilas);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.pasta-abrir,
+.pagina-projetos .pasta-abrir {
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+}
+
+.pagina-projetos .projeto.em-breve .pasta-abrir {
+  padding: 0.3rem 0.6rem;
+  border-width: 1.5px;
+}
+
+/* botão "Ver em tela cheia" mais discreto */
+.galeria-barra .botao {
+  padding: 0.5rem 1.05rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+}
+
+/* botão "Ver projetos" no celular: texto numa linha só, mesmo em espanhol */
+@media (max-width: 700px) {
+  .sobre-botoes .botao-escuro {
+    width: max-content;
+    max-width: none;
+    white-space: nowrap;
+    padding: 0 1.1rem;
+    min-height: 40px;
+    font-size: 0.8rem;
+  }
+}
