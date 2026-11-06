@@ -5029,14 +5029,12 @@ html.paginas-toque {
 
 /* VERSO */
 .cara-verso .cracha-titulo {
-  margin: 0;
   font-family: "Anton", var(--fonte-titulo);
   font-size: 2.2em;
   font-weight: 400;
   letter-spacing: 0.02em;
   line-height: 1;
   text-transform: uppercase;
-  text-align: left;
   color: #fff;
 }
 
@@ -5326,7 +5324,7 @@ html.paginas-toque {
 }
 
 .pasta-abrir,
-.pagina-projetos .pasta-abrir {
+.pagina-projetos {
   font-size: 0.58rem;
   letter-spacing: 0.1em;
   opacity: 0.8;
