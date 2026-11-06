@@ -5466,3 +5466,9 @@ html.paginas-toque {
   #sobre { padding-top: 10.5rem; }
   #sobre .sobre-titulo { margin-bottom: 4rem; }
 }
+
+/* Sobre no celular/tablet: mais ar entre o menu, o título e o conteúdo */
+@media (max-width: 1000px) {
+  #sobre { padding-top: 9rem; }
+  #sobre .sobre-titulo { margin-bottom: 3rem; }
+}
