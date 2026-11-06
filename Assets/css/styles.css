@@ -5472,3 +5472,41 @@ html.paginas-toque {
   #sobre { padding-top: 9rem; }
   #sobre .sobre-titulo { margin-bottom: 3rem; }
 }
+
+/* seta pequena e centrada no lugar da frase "Explora o projeto" */
+.galeria-barra {
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.galeria-barra .botao { align-self: flex-end; }
+
+.explora-seta {
+  display: grid;
+  place-items: center;
+  color: var(--laranja);
+  animation: exploraSeta 1.8s ease-in-out infinite;
+}
+
+@keyframes exploraSeta {
+  0%, 100% { transform: translateY(-3px); opacity: 0.55; }
+  50% { transform: translateY(5px); opacity: 1; }
+}
+
+@media (min-width: 701px) {
+  .galeria-barra { flex-direction: row; justify-content: flex-end; }
+  .galeria-barra .botao { align-self: auto; }
+  .explora-seta {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -11px 0 0 -11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .explora-seta { animation: none; }
+}

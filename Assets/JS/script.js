@@ -33,7 +33,7 @@
     'PRONTO': 'LISTO', 'PUXANDO...': 'TIRANDO...', 'IMPRIMINDO': 'IMPRIMIENDO', 'CONCLUÍDO': 'COMPLETADO',
     // habilidades
     'Identidade visual': 'Identidad visual', 'Ilustrações': 'Ilustraciones', 'Design editorial': 'Diseño editorial',
-    'Marketing digital': 'Marketing digital', 'Cartazes': 'Carteles', 'Tipografia': 'Tipografía',
+    'Marketing digital': 'Marketing digital', 'Cartazes': 'Afiches', 'Tipografia': 'Tipografía',
     'Programação': 'Programación', 'Idealização de marca': 'Ideación de marca',
     'Cada habilidade é uma peça': 'Cada habilidad es una pieza',
     'Encaixando as habilidades...': 'Encajando las habilidades...',
@@ -3084,8 +3084,8 @@ const PROJETOS = [
   { arquivo: 'projeto3.sojou.html',    titulo: 'Sojou',         rotulo: 'Branding', capa: 'Assets/imgs/sojou1.jpg' },
   { arquivo: 'projeto4.bloom.html',    titulo: 'Bloom Coffee',  rotulo: 'Branding', capa: 'Assets/imgs/Bloom1.png' },
   { arquivo: 'projeto5.pessoal.html',  titulo: 'Marca Pessoal', rotulo: 'Branding', capa: 'Assets/imgs/marca1.png' },
-  { arquivo: 'projeto6.lumina.html',   titulo: 'LUMINA',        rotulo: 'Branding', capa: 'Assets/imgs/Lumina.1.jpg' },
-  { arquivo: 'projeto7.vivarium.html', titulo: 'Vivarium',      rotulo: 'Afiches',  capa: 'Assets/imgs/vivarium1.png' }
+  { arquivo: 'projeto6.lumina.html',   titulo: 'LUMINA',        rotulo: 'Editorial', capa: 'Assets/imgs/Lumina.1.jpg' },
+  { arquivo: 'projeto7.vivarium.html', titulo: 'Vivarium',      rotulo: 'Cartazes',  capa: 'Assets/imgs/vivarium1.png' }
 ];
 
 (function () {
