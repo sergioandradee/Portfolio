@@ -11,7 +11,7 @@
     'Projetos | Sergio Andrade': 'Proyectos | Sergio Andrade',
     // home e crachá
     'Designer Multimídia': 'Diseñador Multimedia',
-    'Crachá de Sergio Andrade. Clica ou carrega em Enter para virar.': 'Credencial de Sergio Andrade. Haz clic o pulsa Enter para darle la vuelta.',
+    'Crachá de Sergio Andrade. Clique ou pressione Enter para virar.': 'Credencial de Sergio Andrade. Haz clic o pulsa Enter para darle la vuelta.',
     'Portfólio': 'Portafolio',
     'Disponível para projetos': 'Disponible para proyectos',
     'Clique para virar ↻': 'Haz clic para girar ↻',
@@ -19,23 +19,24 @@
     'Mudar as cores da Home': 'Cambiar los colores del Inicio',
     'Mudar as cores': 'Cambiar los colores',
     // sobre
+    'Contatos': 'Contactos',
     'Sobre mim': 'Acerca de mí',
     'Designer multimídia.': 'Diseñador multimedia.',
     'Sempre a experimentar.': 'Siempre experimentando.',
     'Olá, me chamo Sergio': 'Hola, me llamo Sergio',
-    'O design, para mim, é uma forma de transformar ideias em experiências visuais. É explorar, experimentar e encontrar novas maneiras de comunicar aquilo que nem sempre precisa de ser dito com palavras.':
+    'O design, para mim, é uma forma de transformar ideias em experiências visuais. É explorar, experimentar e encontrar novas maneiras de comunicar aquilo que nem sempre precisa ser dito com palavras.':
       'El diseño, para mí, es una forma de transformar ideas en experiencias visuales. Es explorar, experimentar y encontrar nuevas maneras de comunicar aquello que no siempre necesita decirse con palabras.',
     'Experimentar, testar e evoluir.': 'Experimentar, probar y evolucionar.',
     'Ver projetos': 'Ver proyectos',
     'Animação do meu personagem': 'Animación de mi personaje',
     'Vamos criar algo juntos?': '¿Creamos algo juntos?',
-    'PRONTO': 'LISTO', 'A PUXAR...': 'TIRANDO...', 'IMPRIMINDO': 'IMPRIMIENDO', 'CONCLUÍDO': 'COMPLETADO',
+    'PRONTO': 'LISTO', 'PUXANDO...': 'TIRANDO...', 'IMPRIMINDO': 'IMPRIMIENDO', 'CONCLUÍDO': 'COMPLETADO',
     // habilidades
     'Identidade visual': 'Identidad visual', 'Ilustrações': 'Ilustraciones', 'Design editorial': 'Diseño editorial',
     'Marketing digital': 'Marketing digital', 'Cartazes': 'Carteles', 'Tipografia': 'Tipografía',
     'Programação': 'Programación', 'Idealização de marca': 'Ideación de marca',
     'Cada habilidade é uma peça': 'Cada habilidad es una pieza',
-    'A encaixar as habilidades...': 'Encajando las habilidades...',
+    'Encaixando as habilidades...': 'Encajando las habilidades...',
     'Habilidades encaixadas ✓': 'Habilidades encajadas ✓',
     'Próxima': 'Siguiente', 'Peças': 'Piezas', '↻ Jogar de novo': '↻ Jugar de nuevo',
     // processo
@@ -46,23 +47,21 @@
     'Referências, croquis soltos e muitas ideias em cima da mesa.': 'Referencias, bocetos sueltos y muchas ideas sobre la mesa.',
     'Dar forma ao conceito escolhido, com cor, tipografia e composição.': 'Dar forma al concepto elegido, con color, tipografía y composición.',
     'Refinar': 'Refinar',
-    'Testar, ajustar os detalhes e entregar tudo pronto a usar.': 'Probar, ajustar los detalles y entregar todo listo para usar.',
+    'Testar, ajustar os detalhes e entregar tudo pronto para usar.': 'Probar, ajustar los detalles y entregar todo listo para usar.',
     'Chegamos ao fim do processo.': 'Llegamos al final del proceso.',
     // conversa e correio
-    'Tens um projeto em mente? Conta-me a ideia e vemos como a pôr de pé.': '¿Tienes un proyecto en mente? Cuéntame la idea y vemos cómo hacerla realidad.',
+    'Tem um projeto em mente? Me conte a ideia e vamos ver como tirá-lo do papel.': '¿Tienes un proyecto en mente? Cuéntame la idea y vemos cómo hacerla realidad.',
     'Enviar email': 'Enviar email',
-    'Ou toque na manivela do correio ↻': 'O toca la manivela del correo ↻',
-    'Toque na manivela (ou gire com o dedo) ↻': 'Toca la manivela (o gira con el dedo) ↻',
     'CORREIO': 'CORREO',
     'Girar a manivela para tirar uma carta do correio': 'Girar la manivela para sacar una carta del correo',
     'Carta do correio': 'Carta del correo',
     'Fechar carta': 'Cerrar carta',
-    'Carta 1 · Contactos': 'Carta 1 · Contactos',
-    'Conta-me a tua ideia. Respondo o mais depressa que puder.': 'Cuéntame tu idea. Te respondo lo más rápido que pueda.',
+    'Carta 1 · Contatos': 'Carta 1 · Contactos',
+    'Me conte sua ideia. Respondo o mais rápido que puder.': 'Cuéntame tu idea. Te respondo lo más rápido que pueda.',
     'Copiado!': '¡Copiado!',
     'Carta 2 · Projetos': 'Carta 2 · Proyectos',
-    'Queres ver o que já fiz?': '¿Quieres ver lo que ya hice?',
-    'Identidades, ilustrações, cartazes e mais. Passa pela galeria de projetos e vê como cada ideia ganhou forma.':
+    'Quer ver o que já fiz?': '¿Quieres ver lo que ya hice?',
+    'Identidades, ilustrações, cartazes e mais. Passe pela galeria de projetos e veja como cada ideia ganhou forma.':
       'Identidades, ilustraciones, afiches y más. Pasa por la galería de proyectos y mira cómo cada idea tomó forma.',
     // projetos
     'Em breve': 'Próximamente', 'Aguarda': 'Espera',
@@ -76,7 +75,7 @@
     'Próximo projeto': 'Siguiente proyecto',
     'Ver todos os projetos': 'Ver todos los proyectos',
     'Sair ×': 'Salir ×',
-    'Imagem anterior': 'Imagen anterior', 'Imagem seguinte': 'Imagen siguiente',
+    'Imagem anterior': 'Imagen anterior', 'Próxima imagem': 'Imagen siguiente',
     // descrições dos projetos
     'O projeto de identidade visual Dama Centeio busca traduzir o cuidado e a delicadeza da panificação artesanal por meio de uma estética elegante, acolhedora e atemporal. A marca ganha vida através de uma tipografia marcante, uma paleta de tons terrosos e uma ilustração feminina que representa o lado humano e cuidadoso por trás de cada produto. O resultado é uma identidade que busca tornar cada detalhe da experiência mais especial, autêntico e memorável.':
       'El proyecto de identidad visual Dama Centeio busca traducir el cuidado y la delicadeza de la panadería artesanal a través de una estética elegante, acogedora y atemporal. La marca cobra vida mediante una tipografía llamativa, una paleta de tonos terrosos y una ilustración femenina que representa el lado humano y cuidadoso detrás de cada producto. El resultado es una identidad que busca hacer cada detalle de la experiencia más especial, auténtico y memorable.',
@@ -1887,7 +1886,7 @@ if (etiqueta) {
     let texto = 'PRONTO';
     if (imp >= 1) texto = 'CONCLUÍDO';
     else if (imp > 0) texto = 'IMPRIMINDO';
-    else if (entrada > 0) texto = 'A PUXAR...';
+    else if (entrada > 0) texto = 'PUXANDO...';
     if (window.T) texto = window.T(texto);
     if (lcd.textContent !== texto) lcd.textContent = texto;
 
@@ -2326,7 +2325,7 @@ if (etiqueta) {
     acabou = false;
     tabuleiro.innerHTML = '';
     if (botao) botao.hidden = true;
-    dizer('A encaixar as habilidades...');
+    dizer('Encaixando as habilidades...');
 
     if (reduzir) {
       // sem animação: já aparece tudo encaixado
@@ -3149,7 +3148,7 @@ const PROJETOS = [
     '<div class="lb-palco">' +
       '<button type="button" class="lb-seta lb-ant" aria-label="Imagem anterior">‹</button>' +
       '<img class="lb-img" alt="" draggable="false">' +
-      '<button type="button" class="lb-seta lb-seg" aria-label="Imagem seguinte">›</button>' +
+      '<button type="button" class="lb-seta lb-seg" aria-label="Próxima imagem">›</button>' +
     '</div>' +
     '<div class="lb-tiras"></div>';
   document.body.appendChild(lb);

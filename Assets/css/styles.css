@@ -5431,3 +5431,38 @@ html.paginas-toque {
   #sobre .sobre-foto.escondido { transform: translateY(26px); transition-delay: 0.12s; }
   #sobre .sobre-texto.escondido { transform: translateY(26px); transition-delay: 0.12s; }
 }
+
+
+/* a seta e o arco da manivela: um convite mais visível, ainda suave */
+#manivelaDica {
+  animation: manivelaPontos 1.8s linear infinite, manivelaConvite 2.2s ease-in-out infinite;
+}
+
+#manivelaSeta {
+  animation: manivelaSeta 2.2s ease-in-out infinite;
+  filter: drop-shadow(0 0 5px rgba(242, 120, 75, 0.85));
+}
+
+@keyframes manivelaConvite {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes manivelaPontos {
+  to { stroke-dashoffset: -22; }
+}
+
+@keyframes manivelaSeta {
+  0%, 100% { opacity: 0.6; transform: rotate(-4deg) scale(1); }
+  50% { opacity: 1; transform: rotate(9deg) scale(1.12); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #manivelaDica, #manivelaSeta { animation: none; opacity: 1; }
+}
+
+/* Sobre no computador: mais ar entre o menu, o título e o conteúdo */
+@media (min-width: 1001px) {
+  #sobre { padding-top: 10.5rem; }
+  #sobre .sobre-titulo { margin-bottom: 4rem; }
+}
