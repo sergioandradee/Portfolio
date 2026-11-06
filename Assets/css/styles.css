@@ -5385,3 +5385,49 @@ html.paginas-toque {
 
   .trilha-fim-texto { font-size: clamp(0.95rem, 4.6vw, 1.3rem); }
 }
+
+/* títulos das secções e nomes dos projetos centrados */
+.sobre-titulo,
+.processo-secao .sobre-titulo,
+#habilidades .sobre-titulo {
+  text-align: center;
+}
+
+.pagina-projetos .sobre-titulo {
+  margin: 0 auto 4.6rem;
+  text-align: center;
+}
+
+.pagina-projetos .pasta-frente {
+  position: relative;
+  justify-content: center;
+}
+
+.pagina-projetos .projeto h3 {
+  text-align: center;
+}
+
+.pagina-projetos .pasta-abrir {
+  position: absolute;
+  right: 0;
+  bottom: 0.35em;
+}
+
+/* telemóvel: foto e texto do Sobre entram no mesmo instante */
+@media (max-width: 900px) {
+  .sobre-texto.entrada-direita.escondido { transition-delay: 0s; }
+}
+
+/* Sobre: entrada leve e em sequência (título, foto, texto) depois do puxão */
+#sobre .escondido {
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+#sobre .sobre-titulo.escondido { transform: translateY(18px); }
+#sobre .sobre-foto.escondido { transform: translateX(-34px); transition-delay: 0.12s; }
+#sobre .sobre-texto.escondido { transform: translateX(34px); transition-delay: 0.28s; }
+#sobre .escondido.visivel { transform: none; }
+
+@media (max-width: 900px) {
+  #sobre .sobre-foto.escondido { transform: translateY(26px); transition-delay: 0.12s; }
+  #sobre .sobre-texto.escondido { transform: translateY(26px); transition-delay: 0.12s; }
+}

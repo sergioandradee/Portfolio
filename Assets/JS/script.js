@@ -331,11 +331,40 @@ const entradasSobre = document.querySelectorAll(
   '.entrada-esquerda, .entrada-direita, .entrada-baixo'
 );
 
+// Dentro do Sobre, o conteúdo só entra quando a folha já "chegou" (depois do puxão), e repete sempre
+const secaoSobre = document.getElementById('sobre');
+const dentroSobre = new Map();
+
+function chegouSobre() {
+  return !!secaoSobre && secaoSobre.getBoundingClientRect().top <= window.innerHeight * 0.22;
+}
+
+function atualizarSobre() {
+  const chegou = chegouSobre();
+  const foto = document.querySelector('.sobre-foto.escondido');
+  const texto = document.querySelector('.sobre-texto.escondido');
+  const juntos = window.innerWidth <= 900 && foto && texto &&
+    (dentroSobre.get(foto) || dentroSobre.get(texto));
+  dentroSobre.forEach(function (dentro, el) {
+    let ver = chegou && dentro;
+    if (juntos && (el === foto || el === texto)) ver = chegou;
+    el.classList.toggle('visivel', ver);
+  });
+}
+
 const observadorSobre = new IntersectionObserver(function (lista) {
   lista.forEach(function (item) {
-    item.target.classList.toggle('visivel', item.isIntersecting);
+    if (secaoSobre && secaoSobre.contains(item.target)) {
+      dentroSobre.set(item.target, item.isIntersecting);
+    } else {
+      item.target.classList.toggle('visivel', item.isIntersecting);
+    }
   });
+  atualizarSobre();
 }, { threshold: 0.25 });
+
+window.addEventListener('scroll', atualizarSobre, { passive: true });
+window.addEventListener('resize', atualizarSobre);
 
 entradasSobre.forEach(function (elemento) {
   elemento.classList.add('escondido');
