@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 1) TÍTULO DA ABA DO NAVEGADOR -->
+  <title>Pluma Smoothies | Sergio Andrade</title>
+  <link rel="icon" href="Assets/imgs/minha.logo.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Lilita+One&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Assets/css/styles.css">
+</head>
+<body class="sem-circulos pagina-projeto">
+
+  <div class="cursor" id="cursor">
+    <div class="cursor-bola"><span class="cursor-texto">Ver</span></div>
+  </div>
+
+  <!-- Barra fina no topo que mostra quanto já leste da página -->
+  <div class="progresso-leitura" id="progressoLeitura" aria-hidden="true"></div>
+
+  <!-- MENU -->
+  <header class="menu vidro">
+    <a href="index.html#home"><img class="logo" src="Assets/imgs/minha.logo.png" alt="Sergio Andrade"></a>
+
+    <button class="botao-menu" id="botao-menu" aria-label="Abrir menu">☰</button>
+
+    <nav id="links">
+      <a href="index.html">Home</a>
+      <a href="index.html#sobre">Sobre</a>
+      <a href="index.html#conversa">Criar</a>
+      <a href="projetos.html" class="ativo">Projetos</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- TOPO: título e ficha técnica -->
+    <section class="projeto-hero">
+      <a class="voltar" href="projetos.html">← Todos os projetos</a>
+
+      <!-- 2) CATEGORIA e 3) NOME DO PROJETO -->
+      <p class="rotulo">Branding</p>
+      <h1>Pluma Smoothies</h1>
+
+      <!-- 4) FICHA TÉCNICA: podes apagar ou acrescentar blocos <div><dt>…</dt><dd>…</dd></div> -->
+      <dl class="ficha vidro">
+        <div><dt>Categoria</dt><dd>Branding</dd></div>
+        <div><dt>Ferramentas</dt><dd>Adobe Photoshop, Adobe Illustrator, Procreate</dd></div>
+      </dl>
+    </section>
+
+    <!-- 5) DESCRIÇÃO -->
+    <section class="bloco texto-projeto">
+      <p class="descrip">Descrição:</p>
+      <p>Pluma Smoothies é uma marca vibrante e descontraída que transforma smoothies em uma explosão de sabor e frescor. Em seu food truck, combina frutas selecionadas de alta qualidade com uma textura cremosa e sabores intensos, criando bebidas irresistíveis.</p>
+      <p>Com cores marcantes e uma mascote cheia de personalidade desenhada unicamente para a marca, Pluma transmite uma energia tropical, divertida e refrescante a cada gole.</p>
+    </section>
+
+    <!-- 6) IMAGENS: cada <img> é uma imagem do projeto, uma debaixo da outra.
+         Para adicionar mais, copia uma linha <img> e muda o nome do ficheiro e o alt.
+         A galeria em tela cheia (botão e clique na imagem) usa estas mesmas imagens: não precisas repeti-las. -->
+    <section class="projeto-galeria">
+      <div class="galeria-barra">
+        <span class="explora-seta" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7 7 7-7"/></svg></span>
+        <button type="button" class="botao botao-vidro" id="abrirGaleria">Ver em tela cheia ⤢</button>
+      </div>
+
+      <div class="projeto-imagens" id="projetoImagens">
+        <img src="Assets/imgs/pluma1.jpg" alt="Pluma Smoothies — imagem 1">
+        <img src="Assets/imgs/pluma2.jpg" alt="Pluma Smoothies — imagem 2" loading="lazy">
+        <img src="Assets/imgs/pluma3.jpg" alt="Pluma Smoothies — imagem 3" loading="lazy">
+        <img src="Assets/imgs/pluma4.jpg" alt="Pluma Smoothies — imagem 4" loading="lazy">
+        <img src="Assets/imgs/pluma5.jpg" alt="Pluma Smoothies — imagem 5" loading="lazy">
+      </div>
+    </section>
+
+    <!-- PRÓXIMO PROJETO: preenchido sozinho pelo JavaScript.
+         A lista de projetos está no topo do bloco "PÁGINA DE PROJETO" do script.js. -->
+    <section class="proximo" id="proximoProjeto" aria-label="Próximo projeto"></section>
+
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer>
+    <p>© <span id="ano"></span> Sergio Andrade</p>
+    <nav class="redes">
+      <a href="mailto:sergiodandrade2013@gmail.com">Email</a>
+      <a href="https://www.behance.net/sergioasf" target="_blank" rel="noopener">Behance</a>
+      <a href="https://www.instagram.com/bysergio.a/?utm_source=ig_web_button_share_sheet" target="_blank" rel="noopener">Instagram</a>
+    </nav>
+  </footer>
+
+  <script src="Assets/JS/script.js"></script>
+</body>
+</html>

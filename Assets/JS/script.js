@@ -64,7 +64,7 @@
     'Identidades, ilustrações, cartazes e mais. Passe pela galeria de projetos e veja como cada ideia ganhou forma.':
       'Identidades, ilustraciones, afiches y más. Pasa por la galería de proyectos y mira cómo cada idea tomó forma.',
     // projetos
-    'Em breve': 'Próximamente', 'Aguarda': 'Espera',
+    'Em breve': 'Próximamente', '': 'Espera',
     'Projeto em breve': 'Proyecto próximamente',
     // página de projeto
     '← Todos os projetos': '← Todos los proyectos',
@@ -77,6 +77,10 @@
     'Sair ×': 'Salir ×',
     'Imagem anterior': 'Imagen anterior', 'Próxima imagem': 'Imagen siguiente',
     // descrições dos projetos
+    'Pluma Smoothies é uma marca vibrante e descontraída que transforma smoothies em uma explosão de sabor e frescor. Em seu food truck, combina frutas selecionadas de alta qualidade com uma textura cremosa e sabores intensos, criando bebidas irresistíveis.':
+      'Pluma Smoothies es una marca vibrante y desenfadada que transforma los smoothies en una explosión de sabor y frescura. En su food truck, combina frutas seleccionadas de alta calidad con una textura cremosa y sabores intensos, creando bebidas irresistibles.',
+    'Com cores marcantes e uma mascote cheia de personalidade desenhada unicamente para a marca, Pluma transmite uma energia tropical, divertida e refrescante a cada gole.':
+      'Con colores llamativos y una mascota llena de personalidad dibujada exclusivamente para la marca, Pluma transmite una energía tropical, divertida y refrescante en cada sorbo.',
     'O projeto de identidade visual Dama Centeio busca traduzir o cuidado e a delicadeza da panificação artesanal por meio de uma estética elegante, acolhedora e atemporal. A marca ganha vida através de uma tipografia marcante, uma paleta de tons terrosos e uma ilustração feminina que representa o lado humano e cuidadoso por trás de cada produto. O resultado é uma identidade que busca tornar cada detalhe da experiência mais especial, autêntico e memorável.':
       'El proyecto de identidad visual Dama Centeio busca traducir el cuidado y la delicadeza de la panadería artesanal a través de una estética elegante, acogedora y atemporal. La marca cobra vida mediante una tipografía llamativa, una paleta de tonos terrosos y una ilustración femenina que representa el lado humano y cuidadoso detrás de cada producto. El resultado es una identidad que busca hacer cada detalle de la experiencia más especial, auténtico y memorable.',
     'Sojou nasce da vontade de dar uma nova cara ao tofu. Uma marca que combina sabor, criatividade e atitude para transformar um alimento versátil em uma experiência divertida e cheia de personalidade. Seus mascotes dão vida à marca, traduzindo de forma descontraída e expressiva a diversidade de sabores e o espírito único da Sojou.':
@@ -3085,7 +3089,9 @@ const PROJETOS = [
   { arquivo: 'projeto4.bloom.html',    titulo: 'Bloom Coffee',  rotulo: 'Branding', capa: 'Assets/imgs/Bloom1.png' },
   { arquivo: 'projeto5.pessoal.html',  titulo: 'Marca Pessoal', rotulo: 'Branding', capa: 'Assets/imgs/marca1.png' },
   { arquivo: 'projeto6.lumina.html',   titulo: 'LUMINA',        rotulo: 'Editorial', capa: 'Assets/imgs/Lumina.1.jpg' },
-  { arquivo: 'projeto7.vivarium.html', titulo: 'Vivarium',      rotulo: 'Cartazes',  capa: 'Assets/imgs/vivarium1.png' }
+  { arquivo: 'projeto7.vivarium.html', titulo: 'Vivarium',      rotulo: 'Cartazes',  capa: 'Assets/imgs/vivarium1.png' },
+  { arquivo: 'projeto8.pluma.html',    titulo: 'Pluma Smoothies', rotulo: 'Branding', capa: 'Assets/imgs/pluma1.jpg' },
+  { arquivo: 'projeto9.boavibe.html',  titulo: 'Festival Boa Vibe', rotulo: 'Cartazes', capa: 'Assets/imgs/boavibe1.jpg' }
 ];
 
 (function () {
